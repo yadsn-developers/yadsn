@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YADSN</title>
+</head>
+<body>
+<form action="{% url 'landing:subscribe' %}" method="POST">
+    {% csrf_token %}
+    <script type="text/javascript" src="//codecha.org/api/challenge?k={{codecha_key}}"> </script>
+    email: <input type="text" name="email">
+    <input type="submit" value="subscribe">
+    </form>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+</body>
+</html>
