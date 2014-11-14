@@ -2,8 +2,7 @@
 Codecha - developers captcha.
 """
 
-import urllib
-import urllib2
+import requests
 
 
 class CodechaClient(object):
@@ -11,8 +10,8 @@ class CodechaClient(object):
     Codecha client.
     """
 
-    URL = 'http://codecha.org/api/verify'
-    RECAPTCHA_URL = 'http://www.google.com/recaptcha/api/verify'
+    URL = 'https://codecha.org/api/verify'
+    RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/verify'
 
     def __init__(self, private_key):
         """
@@ -22,12 +21,6 @@ class CodechaClient(object):
         :return:
         """
         self.private_key = private_key
-
-    @staticmethod
-    def __encode_if_necessary(s):
-        if isinstance(s, unicode):
-            return s.encode('utf-8')
-        return s
 
     def _verify(self, url, challenge, response, remote_ip):
         """
@@ -42,26 +35,17 @@ class CodechaClient(object):
         if not all((challenge, response, remote_ip)):
             return False
 
-        params = urllib.urlencode({
-            'privatekey': CodechaClient.__encode_if_necessary(self.private_key),
-            'remoteip':   CodechaClient.__encode_if_necessary(remote_ip),
-            'response':   CodechaClient.__encode_if_necessary(response),
-            'challenge':  CodechaClient.__encode_if_necessary(challenge),
-        })
-
-        request = urllib2.Request(
+        api_response = requests.post(
             url=url,
-            data=params,
+            data={
+                'privatekey': self.private_key,
+                'remoteip':   remote_ip,
+                'response':   response,
+                'challenge':  challenge,
+            },
             headers={'Content-type': 'application/x-www-form-urlencoded'})
 
-        http_response = urllib2.urlopen(request)
-        response_lines = http_response.read().splitlines()
-        http_response.close()
-
-        if response_lines[0] == 'true':
-            return True
-
-        return False
+        return api_response.text == 'true'
 
     def verify(self, challenge, response, remote_ip):
         """
