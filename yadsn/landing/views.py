@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import HttpResponseRedirect as Redirect
+from django.contrib import messages
 from helpers.codecha import CodechaClient
 from models import Subscriber
 
@@ -27,6 +28,7 @@ def subscribe(request):
     """
     client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
     try:
+        # TODO: Fix the verification, as it always returns False
         result = client.verify(request.POST['codecha_challenge_field'],
                                request.POST['codecha_response_field'],
                                request.META['REMOTE_ADDR'])
@@ -34,18 +36,18 @@ def subscribe(request):
         result = False
 
     if not result:
-        return Redirect(reverse('landing:index'),
-                        {'codecha_key': settings.CODECHA_PUBLIC_KEY,
-                         'message': 'Please solve the Codecha'})
+        messages.error(request, 'Please solve Codecha')
+        return redirect(reverse('landing:index'),
+                        request)
     try:
         Subscriber.objects.create(email=request.POST['email'],
                                   codecha_language='Python',
                                   http_referrer='None')
     except KeyError:
-        return Redirect(reverse('landing:index'),
-                        {'codecha_key': settings.CODECHA_PUBLIC_KEY,
-                         'message': 'Emain could not be blank'})
+        messages.error(request, 'Email could not be blank')
+        return redirect(reverse('landing:index'),
+                        request)
 
-    return Redirect(reverse('landing:index'),
-                    {'codecha_key': settings.CODECHA_PUBLIC_KEY,
-                     'message': 'You are subscribed'})
+    messages.success(request, 'You are subscribed')
+    return redirect(reverse('landing:index'),
+                    request)

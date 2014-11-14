@@ -10,6 +10,12 @@
     email: <input type="text" name="email">
     <input type="submit" value="subscribe">
     </form>
-{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 </body>
 </html>
