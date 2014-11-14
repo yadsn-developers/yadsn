@@ -1,54 +1,51 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from helpers.codecha import Codecha
+from django.conf import settings
+from django.http import HttpResponseRedirect as Redirect
+from helpers.codecha import CodechaClient
 from models import Subscriber
-
-CODECHA_PUBLIC_KEY = "c717b24a797041b79d27e54ed6cee53b"
-CODECHA_PRIVATE_KEY = "3856e53084634b6b8e82f9bf26cb6c30"
 
 
 def index(request):
-    return render(
-        request,
-        'index.html',
-        {
-            'codecha_key': CODECHA_PUBLIC_KEY,
-        },
-    )
+    """
+    Landing index page.
+
+    :param request:
+    :return:
+    """
+    return render(request,
+                  'index.html',
+                  {'codecha_key': settings.CODECHA_PUBLIC_KEY})
 
 
 def subscribe(request):
-    codecha_challenge = request.POST['codecha_challenge_field']
-    codecha_response = request.POST['codecha_response_field']
-    codecha_key = CODECHA_PRIVATE_KEY
-    ip = request.META['REMOTE_ADDR']
+    """
+    Landing subscribe handler.
 
-    if codecha_challenge and codecha_response:
-        codecha_success = Codecha.verify(codecha_challenge, codecha_response, ip, codecha_key)
-    else:
-        codecha_success = False
+    :param request:
+    :return:
+    """
+    client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
+    try:
+        result = client.verify(request.POST['codecha_challenge_field'],
+                               request.POST['codecha_response_field'],
+                               request.META['REMOTE_ADDR'])
+    except KeyError:
+        result = False
 
-    if not codecha_success:
-        return HttpResponseRedirect(
-            reverse('landing:index'),
-            {
-                'codecha_key': CODECHA_PUBLIC_KEY,
-                'error_message': 'Please solve the Codecha',
-            }
-        )
-    else:
-        subscriber = Subscriber(
-            email=request.POST['email'],
-            codecha_language='Python',
-            http_referrer='None'
-        )
-        subscriber.save()
-        return HttpResponseRedirect(
-            reverse('landing:index'),
-            {
-                'codecha_key': CODECHA_PUBLIC_KEY,
-                'error_message': 'You are subscribed',
-            }
-        )
+    if not result:
+        return Redirect(reverse('landing:index'),
+                        {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                         'message': 'Please solve the Codecha'})
+    try:
+        Subscriber.objects.create(email=request.POST['email'],
+                                  codecha_language='Python',
+                                  http_referrer='None')
+    except KeyError:
+        return Redirect(reverse('landing:index'),
+                        {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                         'message': 'Emain could not be blank'})
 
+    return Redirect(reverse('landing:index'),
+                    {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                     'message': 'You are subscribed'})

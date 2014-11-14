@@ -82,3 +82,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Codecha keys
+CODECHA_PUBLIC_KEY = "c717b24a797041b79d27e54ed6cee53b"
+CODECHA_PRIVATE_KEY = "3856e53084634b6b8e82f9bf26cb6c30"
