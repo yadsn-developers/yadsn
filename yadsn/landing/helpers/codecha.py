@@ -45,7 +45,7 @@ class CodechaClient(object):
             },
             headers={'Content-type': 'application/x-www-form-urlencoded'})
 
-        return api_response.text == 'true'
+        return api_response.text.strip(' \t\n\r') == 'true'
 
     def verify(self, challenge, response, remote_ip):
         """

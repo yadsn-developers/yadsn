@@ -28,7 +28,6 @@ def subscribe(request):
     """
     client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
     try:
-        # TODO: Fix the verification, as it always returns False
         result = client.verify(request.POST['codecha_challenge_field'],
                                request.POST['codecha_response_field'],
                                request.META['REMOTE_ADDR'])
@@ -37,17 +36,14 @@ def subscribe(request):
 
     if not result:
         messages.error(request, 'Please solve Codecha')
-        return redirect(reverse('landing:index'),
-                        request)
+        return redirect(reverse('landing:index'), request)
     try:
         Subscriber.objects.create(email=request.POST['email'],
                                   codecha_language='Python',
-                                  http_referrer='None')
+                                  http_referrer=request.META['HTTP_REFERER'])
     except KeyError:
         messages.error(request, 'Email could not be blank')
-        return redirect(reverse('landing:index'),
-                        request)
+        return redirect(reverse('landing:index'), request)
 
     messages.success(request, 'You are subscribed')
-    return redirect(reverse('landing:index'),
-                    request)
+    return redirect(reverse('landing:index'), request)
