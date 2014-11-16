@@ -11,7 +11,6 @@ class CodechaClient(object):
     """
 
     URL = 'https://codecha.org/api/verify'
-    RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/verify'
 
     def __init__(self, private_key):
         """
@@ -22,31 +21,6 @@ class CodechaClient(object):
         """
         self.private_key = private_key
 
-    def _verify(self, url, challenge, response, remote_ip):
-        """
-        Makes verification.
-
-        :param url:
-        :param challenge:
-        :param response:
-        :param remote_ip:
-        :return:
-        """
-        if not all((challenge, response, remote_ip)):
-            return False
-
-        api_response = requests.post(
-            url=url,
-            data={
-                'privatekey': self.private_key,
-                'remoteip':   remote_ip,
-                'response':   response,
-                'challenge':  challenge,
-            },
-            headers={'Content-type': 'application/x-www-form-urlencoded'})
-
-        return api_response.text.strip(' \t\n\r') == 'true'
-
     def verify(self, challenge, response, remote_ip):
         """
         Verifies challenge response.
@@ -56,15 +30,17 @@ class CodechaClient(object):
         :param remote_ip:
         :return:
         """
-        return self._verify(self.URL, challenge, response, remote_ip)
+        if not all((challenge, response, remote_ip)):
+            return False
 
-    def verify_recaptcha(self, challenge, response, remote_ip):
-        """
-        Verifies recaptcha response.
+        api_response = requests.post(
+            url=self.URL,
+            data={
+                'privatekey': self.private_key,
+                'remoteip':   remote_ip,
+                'response':   response,
+                'challenge':  challenge,
+            },
+            headers={'Content-type': 'application/x-www-form-urlencoded'})
 
-        :param challenge:
-        :param response:
-        :param remote_ip:
-        :return:
-        """
-        return self._verify(self.RECAPTCHA_URL, challenge, response, remote_ip)
+        return api_response.text.strip(' \t\n\r') == 'true'

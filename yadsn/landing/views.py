@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.http import HttpResponseRedirect as Redirect
+from django.db import IntegrityError
 from django.contrib import messages
 from helpers.codecha import CodechaClient
 from models import Subscriber
@@ -37,12 +39,20 @@ def subscribe(request):
     if not result:
         messages.error(request, 'Please solve Codecha')
         return redirect(reverse('landing:index'), request)
+
+    # TODO: fetch the selected language from codecha
+
     try:
+        validate_email(request.POST['email'])
         Subscriber.objects.create(email=request.POST['email'],
                                   codecha_language='Python',
                                   http_referrer=request.META['HTTP_REFERER'])
-    except KeyError:
-        messages.error(request, 'Email could not be blank')
+    except ValidationError, error:
+        messages.error(request, error.message)
+        return redirect(reverse('landing:index'), request)
+
+    except IntegrityError:
+        messages.error(request, 'This email is already subscribed')
         return redirect(reverse('landing:index'), request)
 
     messages.success(request, 'You are subscribed')
