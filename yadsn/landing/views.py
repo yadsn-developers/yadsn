@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.db import IntegrityError
 from django.contrib import messages
-from helpers.codecha import CodechaClient
+from codecha import CodechaClient
 from models import Subscriber
 
 
@@ -29,27 +27,38 @@ def subscribe(request):
     :return:
     """
     client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
-
-    result = client.verify(request.POST.get('codecha_challenge_field', None),
-                           request.POST.get('codecha_response_field', None),
-                           request.META['REMOTE_ADDR'])
+    result = client.verify(request.POST.get('codecha_challenge_field'),
+                           request.POST.get('codecha_response_field'),
+                           _get_ip(request))
 
     if not result:
         messages.error(request, 'Please solve Codecha')
         return redirect(reverse('landing:index'), request)
 
-    subscriber = Subscriber(email=request.POST['email'],
-                            codecha_language=request.POST['codecha_language'],
-                            http_referrer=request.META['HTTP_REFERER'])
+    subscriber = Subscriber(email=request.POST.get('email'),
+                            codecha_language=request.POST.get('codecha_language'),
+                            http_referrer=request.META.get('HTTP_REFERER'))
 
     try:
         subscriber.full_clean()
-        subscriber.save()
-
-    except ValidationError as error:
-        for error_message in error.message_dict:
-            messages.error(request, ': '.join([error_message, error.message_dict[error_message][0]]))
+    except ValidationError as exception:
+        for field, errors in exception.message_dict.iteritems():
+            for error in errors:
+                messages.error(request, ': '.join([field, error]))
         return redirect(reverse('landing:index'), request)
+
+    subscriber.save()
 
     messages.success(request, 'You are subscribed')
     return redirect(reverse('landing:index'), request)
+
+
+def _get_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    return ip
