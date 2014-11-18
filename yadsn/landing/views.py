@@ -29,30 +29,26 @@ def subscribe(request):
     :return:
     """
     client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
-    try:
-        result = client.verify(request.POST['codecha_challenge_field'],
-                               request.POST['codecha_response_field'],
-                               request.META['REMOTE_ADDR'])
-    except KeyError:
-        result = False
+
+    result = client.verify(request.POST.get('codecha_challenge_field', None),
+                           request.POST.get('codecha_response_field', None),
+                           request.META['REMOTE_ADDR'])
 
     if not result:
         messages.error(request, 'Please solve Codecha')
         return redirect(reverse('landing:index'), request)
 
-    # TODO: fetch the selected language from codecha
+    subscriber = Subscriber(email=request.POST['email'],
+                            codecha_language=request.POST['codecha_language'],
+                            http_referrer=request.META['HTTP_REFERER'])
 
     try:
-        validate_email(request.POST['email'])
-        Subscriber.objects.create(email=request.POST['email'],
-                                  codecha_language='Python', # request.POST.get('codecha_language')
-                                  http_referrer=request.META['HTTP_REFERER'])
-    except ValidationError, error:
-        messages.error(request, error.message)
-        return redirect(reverse('landing:index'), request)
+        subscriber.full_clean()
+        subscriber.save()
 
-    except IntegrityError:
-        messages.error(request, 'This email is already subscribed')
+    except ValidationError as error:
+        for error_message in error.message_dict:
+            messages.error(request, ': '.join([error_message, error.message_dict[error_message][0]]))
         return redirect(reverse('landing:index'), request)
 
     messages.success(request, 'You are subscribed')
