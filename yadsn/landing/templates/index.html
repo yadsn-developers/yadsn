@@ -4,12 +4,13 @@
     <title>YADSN</title>
 </head>
 <body>
-<form action="{% url 'landing:subscribe' %}" method="POST">
+<form action="{% url 'landing:subscribe' %}" method="POST" onsubmit="this.codecha_language.value = codecha.language">
     {% csrf_token %}
     <script type="text/javascript" src="//codecha.org/api/challenge?k={{codecha_key}}"> </script>
     email: <input type="text" name="email">
+    <input type="hidden" name="codecha_language">
     <input type="submit" value="subscribe">
-    </form>
+</form>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

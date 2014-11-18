@@ -45,7 +45,7 @@ def subscribe(request):
     try:
         validate_email(request.POST['email'])
         Subscriber.objects.create(email=request.POST['email'],
-                                  codecha_language='Python',
+                                  codecha_language='Python', # request.POST.get('codecha_language')
                                   http_referrer=request.META['HTTP_REFERER'])
     except ValidationError, error:
         messages.error(request, error.message)
