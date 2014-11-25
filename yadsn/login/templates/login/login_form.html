@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YADSN login</title>
+</head>
+<body>
+<form action="{% url 'login:login' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+<input type="submit" value="Login" />
+</form>
+</body>
+</html>
