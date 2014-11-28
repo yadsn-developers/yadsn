@@ -15,7 +15,7 @@ def index(request):
     :return:
     """
     return render(request,
-                  'index.html',
+                  'landing/login_form.html',
                   {'codecha_key': settings.CODECHA_PUBLIC_KEY})
 
 
