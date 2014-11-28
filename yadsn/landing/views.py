@@ -36,7 +36,6 @@ class Index(View):
                       {'codecha_key': settings.CODECHA_PUBLIC_KEY,
                        'form': SubscribeForm()})
 
-
     def post(self, request):
         """
         Landing subscribe handler.
