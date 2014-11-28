@@ -1,56 +1,89 @@
-from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.shortcuts import render
+from django import forms
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.contrib import messages
 from codecha import CodechaClient
 from models import Subscriber
+from django.views.generic import View
+from django.http import HttpResponse
+from django.forms.util import ErrorList
 
 
-def index(request):
-    """
-    Landing index page.
-
-    :param request:
-    :return:
-    """
-    return render(request,
-                  'landing/login_form.html',
-                  {'codecha_key': settings.CODECHA_PUBLIC_KEY})
+LANDING_TEMPLATE = 'index.html'
 
 
-def subscribe(request):
-    """
-    Landing subscribe handler.
+class SubscribeForm(forms.Form):
+    email = forms.EmailField(required=True)
 
-    :param request:
-    :return:
-    """
-    client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
-    result = client.verify(request.POST.get('codecha_challenge_field'),
-                           request.POST.get('codecha_response_field'),
-                           _get_ip(request))
+    def subscribe(self, request):
+        email = self.cleaned_data.get('email')
+        subscriber = Subscriber(email=email,
+                                codecha_language=request.POST.get('codecha_language'),
+                                http_referrer=request.META.get('HTTP_REFERER'))
+        return subscriber
 
-    if not result:
-        messages.error(request, 'Please solve Codecha')
-        return redirect(reverse('landing:index'), request)
 
-    subscriber = Subscriber(email=request.POST.get('email'),
-                            codecha_language=request.POST.get('codecha_language'),
-                            http_referrer=request.META.get('HTTP_REFERER'))
+class Index(View):
+    def get(self, request):
+        """
+        Landing index page.
 
-    try:
-        subscriber.full_clean()
-    except ValidationError as exception:
-        for field, errors in exception.message_dict.iteritems():
-            for error in errors:
-                messages.error(request, ': '.join([field, error]))
-        return redirect(reverse('landing:index'), request)
+        :param request:
+        :return:
+        """
+        return render(request,
+                      LANDING_TEMPLATE,
+                      {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                       'form': SubscribeForm()})
 
-    subscriber.save()
+    def post(self, request):
+        """
+        Landing subscribe handler.
 
-    messages.success(request, 'You are subscribed')
-    return redirect(reverse('landing:index'), request)
+        :param request:
+        :return:
+        """
+        form = SubscribeForm(request.POST)
+
+        client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
+        result = client.verify(request.POST.get('codecha_challenge_field'),
+                               request.POST.get('codecha_response_field'),
+                               _get_ip(request))
+
+        if not result:
+            form.non_field_errors = ["Please solve Codecha",]
+            return render(request,
+                          LANDING_TEMPLATE,
+                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                           'form': form})
+
+        if not form.is_valid():
+            return render(request,
+                          LANDING_TEMPLATE,
+                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                           'form': form})
+
+        subscriber = form.subscribe(request)
+
+        try:
+            subscriber.full_clean()
+        except ValidationError as exception:
+            if exception.message_dict:
+                for field, errors in exception.message_dict.iteritems():
+                    err = form._errors.setdefault(field, ErrorList())
+                    for error in errors:
+                        err.append(error)
+            else:
+                form.non_field_errors = exception
+            return render(request,
+                          LANDING_TEMPLATE,
+                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                           'form': form})
+
+        subscriber.save()
+
+        response = "You are subscribed"
+        return HttpResponse(response)
 
 
 def _get_ip(request):
