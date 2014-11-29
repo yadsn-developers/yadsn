@@ -12,13 +12,15 @@ class CodechaClient(object):
 
     URL = 'https://codecha.org/api/verify'
 
-    def __init__(self, private_key):
+    def __init__(self, public_key, private_key):
         """
         Constructor.
 
+        :param public_key:
         :param private_key:
         :return:
         """
+        self.public_key = public_key
         self.private_key = private_key
 
     def verify(self, challenge, response, remote_ip):

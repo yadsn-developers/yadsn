@@ -1,29 +1,20 @@
 from django.shortcuts import render
-from django import forms
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from codecha import CodechaClient
-from models import Subscriber
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
 
+from .forms import SubscribeForm
 
-LANDING_TEMPLATE = 'index.html'
 
-
-class SubscribeForm(forms.Form):
-    email = forms.EmailField(required=True)
-
-    def subscribe(self, request):
-        email = self.cleaned_data.get('email')
-        subscriber = Subscriber(email=email,
-                                codecha_language=request.POST.get('codecha_language'),
-                                http_referrer=request.META.get('HTTP_REFERER'))
-        return subscriber
+LANDING_TEMPLATE = 'landing/index.html'
 
 
 class Index(View):
+
+    _codecha_client = None
+
     def get(self, request):
         """
         Landing index page.
@@ -33,7 +24,7 @@ class Index(View):
         """
         return render(request,
                       LANDING_TEMPLATE,
-                      {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                      {'codecha_key': self._codecha_client().public_key,
                        'form': SubscribeForm()})
 
     def post(self, request):
@@ -45,10 +36,10 @@ class Index(View):
         """
         form = SubscribeForm(request.POST)
 
-        client = CodechaClient(settings.CODECHA_PRIVATE_KEY)
-        result = client.verify(request.POST.get('codecha_challenge_field'),
-                               request.POST.get('codecha_response_field'),
-                               _get_ip(request))
+        result = self._codecha_client().verify(
+            request.POST.get('codecha_challenge_field'),
+            request.POST.get('codecha_response_field'),
+            _get_ip(request))
 
         if not result:
             form.non_field_errors = ["Please solve Codecha",]
