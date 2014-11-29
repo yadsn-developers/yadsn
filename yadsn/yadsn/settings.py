@@ -85,7 +85,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CODECHA = {
+CODECHA_KEYS = {
     'public_key': 'c717b24a797041b79d27e54ed6cee53b',
     'private_key': '3856e53084634b6b8e82f9bf26cb6c30'
 }

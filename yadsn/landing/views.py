@@ -1,11 +1,8 @@
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
-from django.conf import settings
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-
-from .forms import SubscribeForm
 
 
 LANDING_TEMPLATE = 'landing/index.html'
@@ -14,6 +11,7 @@ LANDING_TEMPLATE = 'landing/index.html'
 class Index(View):
 
     _codecha_client = None
+    _subscribe_form = None
 
     def get(self, request):
         """
@@ -25,7 +23,7 @@ class Index(View):
         return render(request,
                       LANDING_TEMPLATE,
                       {'codecha_key': self._codecha_client().public_key,
-                       'form': SubscribeForm()})
+                       'form': self._subscribe_form()})
 
     def post(self, request):
         """
@@ -34,9 +32,10 @@ class Index(View):
         :param request:
         :return:
         """
-        form = SubscribeForm(request.POST)
+        form = self._subscribe_form(request.POST)
+        codecha_client = self._codecha_client()
 
-        result = self._codecha_client().verify(
+        result = codecha_client.verify(
             request.POST.get('codecha_challenge_field'),
             request.POST.get('codecha_response_field'),
             _get_ip(request))
@@ -45,13 +44,13 @@ class Index(View):
             form.non_field_errors = ["Please solve Codecha",]
             return render(request,
                           LANDING_TEMPLATE,
-                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                          {'codecha_key': codecha_client.public_key,
                            'form': form})
 
         if not form.is_valid():
             return render(request,
                           LANDING_TEMPLATE,
-                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                          {'codecha_key': codecha_client.public_key,
                            'form': form})
 
         subscriber = form.subscribe(request)
@@ -68,7 +67,7 @@ class Index(View):
                 form.non_field_errors = exception
             return render(request,
                           LANDING_TEMPLATE,
-                          {'codecha_key': settings.CODECHA_PUBLIC_KEY,
+                          {'codecha_key': codecha_client.public_key,
                            'form': form})
 
         subscriber.save()

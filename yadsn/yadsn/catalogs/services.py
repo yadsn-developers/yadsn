@@ -13,12 +13,13 @@ class ServicesCatalog(Catalog):
     namespace = 'services'
 
     @factory
-    @requires('codecha', from_namespace='settings', with_name='keys')
-    def codecha_client(self, keys):
+    @requires('codecha_keys', from_namespace='settings')
+    def codecha_client(self, codecha_keys):
         """
         :rtype: codecha.CodechaClient
         """
-        return codecha.CodechaClient(**keys)
+        return codecha.CodechaClient(codecha_keys['public_key'],
+                                     codecha_keys['private_key'])
 
 
 catalog = ServicesCatalog()

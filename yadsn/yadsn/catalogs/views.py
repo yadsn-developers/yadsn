@@ -23,11 +23,13 @@ class ViewsCatalog(Catalog):
 
     @factory
     @requires_provider('codecha_client', from_namespace='services')
-    def landing_index(self, codecha_client):
+    @requires_provider('subscribe_form', from_namespace='forms')
+    def landing_index(self, codecha_client, subscribe_form):
         """
         :rtype: landing.views.Index
         """
-        return landing.views.Index.as_view(_codecha_client=codecha_client)
+        return landing.views.Index.as_view(_codecha_client=codecha_client,
+                                           _subscribe_form=subscribe_form)
 
 
 catalog = ViewsCatalog()
