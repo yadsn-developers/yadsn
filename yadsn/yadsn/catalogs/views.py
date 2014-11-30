@@ -3,7 +3,7 @@ Views catalog.
 """
 
 from pybinder import Catalog
-from pybinder.decorators import factory, requires_provider
+from pybinder.decorators import provides, requires_provider
 
 import login.views
 import landing.views
@@ -13,18 +13,18 @@ class ViewsCatalog(Catalog):
 
     namespace = 'views'
 
-    @factory
+    @provides('login_index')
     @requires_provider('login_form', from_namespace='forms')
-    def login_index(self, login_form):
+    def provide_login_index(self, login_form):
         """
         :rtype: login.views.Index
         """
         return login.views.Index.as_view(_login_form=login_form)
 
-    @factory
+    @provides('landing_index')
     @requires_provider('codecha_client', from_namespace='services')
     @requires_provider('subscribe_form', from_namespace='forms')
-    def landing_index(self, codecha_client, subscribe_form):
+    def provide_landing_index(self, codecha_client, subscribe_form):
         """
         :rtype: landing.views.Index
         """

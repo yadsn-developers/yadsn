@@ -3,7 +3,7 @@ Services catalog.
 """
 
 from pybinder import Catalog
-from pybinder.decorators import factory, requires
+from pybinder.decorators import provides, requires
 
 import codecha
 
@@ -12,9 +12,9 @@ class ServicesCatalog(Catalog):
 
     namespace = 'services'
 
-    @factory
+    @provides('codecha_client')
     @requires('codecha_keys', from_namespace='settings')
-    def codecha_client(self, codecha_keys):
+    def provide_codecha_client(self, codecha_keys):
         """
         :rtype: codecha.CodechaClient
         """
