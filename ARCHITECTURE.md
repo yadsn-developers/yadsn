@@ -1,6 +1,6 @@
 # YADSN ARCHITECTURE
 
-### Architecture Layers
+### Architecture layers
 
 - Views
     - HTTP input / output only.
@@ -13,7 +13,7 @@
 - Services
     - Third party integration modules (Codecha, Facebook, Gmail, GitHub, StackOverflow clients...)
 
-### Architecture Layers Interaction
+### Architecture layers interaction
 
 - Views
     - Can talk to:
@@ -33,3 +33,7 @@
 - Services:
     - Can talk to:
         - Nobody.
+
+### Dependency managment
+
+YADSN uses PyBinder (https://pypi.python.org/pypi/PyBinder) for dependency management. PyBinder catalogs are placed in `yadsn/catalogs` package.
