@@ -36,4 +36,16 @@
 
 ### Dependency managment
 
-YADSN uses PyBinder (https://pypi.python.org/pypi/PyBinder) for dependency management. PyBinder catalogs are placed in `yadsn/catalogs` package.
+YADSN uses PyBinder (https://pypi.python.org/pypi/PyBinder) for dependency management.
+
+PyBinder catalogs are placed in `yadsn/catalogs` package:
+
+```
+- yadsn/
+    - catalogs/
+        - __init__.py   # PyBinder container definition.
+        - forms.py      # Forms definition.
+        - models.py     # Models definition.
+        - models_db.py  # Database models definition.
+        - services.py   # Services definition.
+```
