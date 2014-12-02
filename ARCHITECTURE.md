@@ -2,8 +2,6 @@
 
 ### Architecture Layers
 
-**YADSN architecture layers:**
-
 - Views
     - HTTP input / output only.
 - Forms
@@ -15,7 +13,7 @@
 - Services
     - Third party integration modules (Codecha, Facebook, Gmail, GitHub, StackOverflow clients...)
 
-**How YADSN architecture layers can talk to each other?**
+### Architecture Layers Interaction
 
 - Views
     - Can talk to:
