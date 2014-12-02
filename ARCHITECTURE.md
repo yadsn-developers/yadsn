@@ -49,3 +49,30 @@ PyBinder catalogs are placed in `yadsn/catalogs` package:
         - models_db.py  # Database models definition.
         - services.py   # Services definition.
 ```
+
+Views are not defined using PyBinder catalogs. Being on the top level of architecture, views use PyBinder `@inject` decorator for dependency injections.
+
+Example:
+
+```python
+from django.views.generic import View
+from yadsn.catalogs import models, forms
+
+
+@models.inject('user_model')
+@forms.inject('registration_form')
+class Registration(View):
+
+    user_model = None
+    """:type: someapp.models.UserModel"""
+    
+    registration_form = None
+    """:type: someapp.forms.RegistrationForm"""
+
+    def get(request):
+        form = self.registration_form(request.POST)
+        
+        if form.is_valid():
+            user = self.user_model.create(**form.cleaned_data)
+        # Etc...
+```
