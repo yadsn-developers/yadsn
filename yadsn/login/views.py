@@ -1,40 +1,25 @@
 from django.shortcuts import render
-from django import forms
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.http import HttpResponse
 from django.views.generic import View
+from yadsn.catalogs import forms
 
 
 LOGIN_TEMPLATE = 'login/login_form.html'
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=255, required=True)
-    password = forms.CharField(widget=forms.PasswordInput(), required=True)
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if not user or not user.is_active:
-            raise forms.ValidationError("Invalid login credentials")
-        return self.cleaned_data
-
-    def login(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        return user
-
-
+@forms.inject('login_form')
 class Index(View):
+
+    _login_form = None
+
     def get(self, request):
         return render(request,
                       LOGIN_TEMPLATE,
-                      {'form': LoginForm()})
+                      {'form': self._login_form()})
 
     def post(self, request):
-        form = LoginForm(request.POST)
+        form = self._login_form(request.POST)
         if not form.is_valid():
             return render(request,
                           LOGIN_TEMPLATE,

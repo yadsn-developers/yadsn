@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from views import Index
+from yadsn.catalogs import views
 
 urlpatterns = [
-    url(r'^$', Index.as_view(), name='index'),
+    url(r'^$', views.provide('login_index'), name='index'),
 ]
