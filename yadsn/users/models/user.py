@@ -2,7 +2,7 @@
 User models.
 """
 
-from .models_db import Subscriber
+from .database import Subscriber
 
 
 class UserManager(object):
