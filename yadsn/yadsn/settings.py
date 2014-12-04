@@ -36,8 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'landing',
+
     'codecha',
+
+    'users',
+    'website',
+
     'login',
 )
 

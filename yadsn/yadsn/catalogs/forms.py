@@ -3,10 +3,10 @@ Forms catalog.
 """
 
 from pybinder import Catalog
-from pybinder.decorators import provides
+from pybinder.decorators import provides, requires
 
 import login.forms
-import landing.forms
+import users.forms
 
 
 class FormsCatalog(Catalog):
@@ -20,12 +20,13 @@ class FormsCatalog(Catalog):
         """
         return login.forms.LoginForm(*args, **kwargs)
 
-    @provides('subscribe_form')
+    @provides('subscription_form')
+    @requires('codecha_client', from_namespace='services')
     def provide_subscribe_form(self, *args, **kwargs):
         """
-        :rtype: landing.forms.SubscribeForm
+        :rtype: users.forms.SubscriptionForm
         """
-        return landing.forms.SubscribeForm(*args, **kwargs)
+        return users.forms.SubscriptionForm(*args, **kwargs)
 
 
 catalog = FormsCatalog()

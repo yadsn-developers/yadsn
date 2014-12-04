@@ -5,7 +5,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'yadsn.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-    url(r'^login/', include('login.urls', namespace='login')),
-    url(r'^landing/', include('landing.urls', namespace='landing')),
+    # url(r'^login/', include('login.urls', namespace='login')),
+    url(r'^$', include('website.urls', namespace='website')),
     url(r'^admin/', include(admin.site.urls)),
 )

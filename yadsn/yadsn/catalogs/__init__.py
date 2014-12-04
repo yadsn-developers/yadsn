@@ -4,7 +4,7 @@ Application catalogs.
 
 from pybinder import Container, Catalog
 from pybinder.providers import Value
-from . import forms, models, models_db, services
+from . import forms, models, services
 
 from django.conf import settings
 
@@ -25,7 +25,5 @@ container.assemble()
 
 forms = container.namespace('forms')
 models = container.namespace('models')
-models_db = container.namespace('models_db')
-services = container.namespace('services')
 
-__all__ = ['forms', 'models', 'models_db', 'services']
+__all__ = ['forms', 'models']
