@@ -4,7 +4,7 @@ Application catalogs.
 
 from pybinder import Container, Catalog
 from pybinder.providers import Value
-from . import forms, models, services, views
+from . import forms, models, models_db, services
 
 from django.conf import settings
 
@@ -20,12 +20,12 @@ def get_settings_catalog(settings, namespace='settings'):
 
 
 container = Container(forms.catalog, models.catalog, services.catalog,
-                      views.catalog, get_settings_catalog(settings))
+                      get_settings_catalog(settings))
 container.assemble()
 
 forms = container.namespace('forms')
 models = container.namespace('models')
+models_db = container.namespace('models_db')
 services = container.namespace('services')
-views = container.namespace('views')
 
-__all__ = ['forms', 'models', 'services', 'views']
+__all__ = ['forms', 'models', 'models_db', 'services']

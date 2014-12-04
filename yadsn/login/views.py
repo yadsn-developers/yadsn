@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.views.generic import View
+from yadsn.catalogs import forms
 
 
 LOGIN_TEMPLATE = 'login/login_form.html'
 
 
+@forms.inject('login_form')
 class Index(View):
 
     _login_form = None

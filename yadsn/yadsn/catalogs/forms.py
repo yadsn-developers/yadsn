@@ -22,6 +22,9 @@ class FormsCatalog(Catalog):
 
     @provides('subscribe_form')
     def provide_subscribe_form(self, *args, **kwargs):
+        """
+        :rtype: landing.forms.SubscribeForm
+        """
         return landing.forms.SubscribeForm(*args, **kwargs)
 
 

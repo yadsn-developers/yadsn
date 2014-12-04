@@ -3,15 +3,14 @@ from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-
+from yadsn.catalogs import forms, services
 
 LANDING_TEMPLATE = 'landing/index.html'
 
 
+@forms.inject('subscribe_form')
+@services.inject('codecha_client')
 class Index(View):
-
-    _codecha_client = None
-    _subscribe_form = None
 
     def get(self, request):
         """
