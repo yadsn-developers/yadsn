@@ -68,6 +68,14 @@ Example of frontend applications:
 - Api
 - Mobile
 
+### Applications interaction
+
+YADSN applications are low coupled. 
+
+The only layer, where backend applications can interact is `models`.
+
+Interaction between database models of different applications is forbidden.
+
 ### Dependency management
 
 YADSN uses PyBinder (https://pypi.python.org/pypi/PyBinder) for dependency management.
