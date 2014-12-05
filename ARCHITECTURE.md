@@ -40,8 +40,10 @@ YADSN has two application packages: backend and frontend.
 
 ```
 - yadsn/
-    - backend/
-    - frontend/
+    - backend/         # Backend applications package
+        - __init__.py
+    - frontend/        # Frontend applications package
+        - __init__.py
 ```
 
 Backend packages provides:
