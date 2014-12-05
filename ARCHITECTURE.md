@@ -33,8 +33,28 @@
 - Services:
     - Can talk to:
         - Nobody.
+        
+### Applications
 
-### Dependency managment
+YADSN has two application packages: backend and frontend.
+
+```
+- yadsn/
+    - backend/
+    - frontend/
+```
+
+Backend packages provides:
+
+    - Models
+    - Forms
+
+Frontend packages provides:
+
+    - Views
+    - Templates
+
+### Dependency management
 
 YADSN uses PyBinder (https://pypi.python.org/pypi/PyBinder) for dependency management.
 
@@ -46,7 +66,6 @@ PyBinder catalogs are placed in `yadsn/catalogs` package:
         - __init__.py   # PyBinder container definition.
         - forms.py      # Forms definition.
         - models.py     # Models definition.
-        - models_db.py  # Database models definition.
         - services.py   # Services definition.
 ```
 
