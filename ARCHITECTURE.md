@@ -29,7 +29,7 @@
         - Services (for interacting with third party services).
 - Database models:
     - Can talk to:
-        - Other database models.
+        - Other database models of current application.
 - Services:
     - Can talk to:
         - Nobody.
