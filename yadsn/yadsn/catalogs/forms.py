@@ -21,7 +21,7 @@ class FormsCatalog(Catalog):
 
     @provides('subscription_form')
     @requires('codecha_client', from_namespace='services')
-    def provide_subscribe_form(self, *args, **kwargs):
+    def provide_subscription_form(self, *args, **kwargs):
         """
         :rtype: users.forms.SubscriptionForm
         """
