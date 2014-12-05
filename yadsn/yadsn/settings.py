@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'backend.users',
 
     # Front apps
-    'front.website',
+    'frontend.website',
 
     'login',
 )
