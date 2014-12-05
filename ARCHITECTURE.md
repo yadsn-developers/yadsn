@@ -24,7 +24,7 @@
         - Nobody.
 - Models:
     - Can talk to:
-        - Database models of current application (for data persistance).
+        - Database models of current application (for data persistence).
         - Other models (for creating some kind of aggregates).
         - Services (for interacting with third party services).
 - Database models:
