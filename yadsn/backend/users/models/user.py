@@ -5,15 +5,15 @@ User models.
 from .database import Subscriber
 
 
-class UserManager(object):
+class Users(object):
     """
-    User manager.
+    Users model.
     """
 
 
-class SubscriptionManager(object):
+class Subscriptions(object):
     """
-    Subscription manager.
+    Subscriptions model.
     """
 
     def subscribe(self, email, codecha_language=None, http_referrer=None):

@@ -3,9 +3,9 @@ Auth models.
 """
 
 
-class AuthManager(object):
+class Auth(object):
     """
-    Auth manager.
+    Auth model.
     """
 
 #

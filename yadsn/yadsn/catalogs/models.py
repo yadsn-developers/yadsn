@@ -13,26 +13,20 @@ class ModelsCatalog(Catalog):
 
     namespace = 'models'
 
-    @provides('user_manager')
-    def provide_user_manager(self):
-        """
-        :rtype: users.models.user.UserManager
-        """
-        return backend.users.models.user.UserManager()
+    @provides('users')
+    def provide_users(self):
+        """:rtype: users.models.user.Users"""
+        return backend.users.models.user.Users()
 
-    @provides('subscription_manager')
-    def provide_subscription_manager(self):
-        """
-        :rtype: users.models.user.SubscriptionManager
-        """
-        return backend.users.models.user.SubscriptionManager()
+    @provides('subscriptions')
+    def provide_subscriptions(self):
+        """:rtype: users.models.user.Subscriptions"""
+        return backend.users.models.user.Subscriptions()
 
-    @provides('auth_manager')
-    def provide_auth_manager(self):
-        """
-        :rtype: users.models.auth.AuthManager
-        """
-        return backend.users.models.auth.AuthManager()
+    @provides('auth')
+    def provide_auth(self):
+        """:rtype: users.models.auth.Auth"""
+        return backend.users.models.auth.Auth()
 
 
 catalog = ModelsCatalog()

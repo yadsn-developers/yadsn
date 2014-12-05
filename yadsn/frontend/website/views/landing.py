@@ -6,7 +6,7 @@ from django.forms.util import ErrorList
 from yadsn.catalogs import forms, models
 
 
-@models.inject('subscription_manager')
+@models.inject('subscriptions')
 @forms.inject_provider('subscription_form')
 class Landing(View):
 
@@ -38,7 +38,7 @@ class Landing(View):
             return render(request, self.TEMPLATE, {'form': form})
 
         try:
-            self.subscription_manager.subscribe(**form.cleaned_data)
+            self.subscriptions.subscribe(**form.cleaned_data)
         except ValidationError as exception:
             if exception.message_dict:
                 for field, errors in exception.message_dict.iteritems():

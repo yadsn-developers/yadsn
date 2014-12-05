@@ -14,17 +14,13 @@ class FormsCatalog(Catalog):
 
     @provides('login_form')
     def provide_login_form(self, *args, **kwargs):
-        """
-        :rtype: backend.users.forms.LoginForm
-        """
+        """:rtype: backend.users.forms.LoginForm"""
         return backend.users.forms.LoginForm(*args, **kwargs)
 
     @provides('subscription_form')
     @requires('codecha_client', from_namespace='services')
     def provide_subscription_form(self, *args, **kwargs):
-        """
-        :rtype: users.forms.SubscriptionForm
-        """
+        """:rtype: users.forms.SubscriptionForm"""
         return backend.users.forms.SubscriptionForm(*args, **kwargs)
 
 

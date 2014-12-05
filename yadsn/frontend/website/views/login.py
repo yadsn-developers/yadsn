@@ -3,7 +3,7 @@ from django.views.generic import View
 from yadsn.catalogs import forms, models
 
 
-@models.inject('auth_manager')
+@models.inject('auth')
 @forms.inject_provider('login_form')
 class Login(View):
 
