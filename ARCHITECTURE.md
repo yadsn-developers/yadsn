@@ -34,7 +34,7 @@
     - Can talk to:
         - Nobody.
         
-### Applications
+### Application packages
 
 YADSN has two application packages: backend and frontend.
 
@@ -45,14 +45,26 @@ YADSN has two application packages: backend and frontend.
 ```
 
 Backend packages provides:
-
-    - Models
-    - Forms
+- Models
+- Database models
+- Forms
 
 Frontend packages provides:
+- Views
+- Templates
 
-    - Views
-    - Templates
+This is because of models and forms can be nicely reused, views and templates are not.
+
+Examples of backend applications:
+- Users
+- Blogs
+- Messages
+- NewsFeed
+
+Example of frontend applications:
+- Website
+- Api
+- Mobile
 
 ### Dependency management
 
