@@ -5,9 +5,9 @@
 - Views
     - HTTP input / output only.
 - Forms
-    - Data validation only (all fields defined, all fields are valid types).
+    - Data validation only (all fields are defined, all fields are valid types).
 - Models
-    - Bussiness logic layer.
+    - Business logic layer.
 - Database models
     - Dry Django ORM (models definition only).
 - Services
