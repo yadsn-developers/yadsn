@@ -5,7 +5,6 @@ Forms catalog.
 from pybinder import Catalog
 from pybinder.decorators import provides, requires
 
-import login.forms
 import backend.users.forms
 
 
@@ -16,9 +15,9 @@ class FormsCatalog(Catalog):
     @provides('login_form')
     def provide_login_form(self, *args, **kwargs):
         """
-        :rtype: login.forms.LoginForm
+        :rtype: backend.users.forms.LoginForm
         """
-        return login.forms.LoginForm(*args, **kwargs)
+        return backend.users.forms.LoginForm(*args, **kwargs)
 
     @provides('subscription_form')
     @requires('codecha_client', from_namespace='services')

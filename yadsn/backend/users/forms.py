@@ -40,3 +40,8 @@ class SubscriptionForm(forms.Form):
             raise forms.ValidationError('Please solve Codecha')
 
         return cleaned_data
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=255, required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
