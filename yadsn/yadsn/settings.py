@@ -37,10 +37,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'codecha',
+    # Backend apps
+    'backend.codecha',
+    'backend.users',
 
-    'users',
-    'website',
+    # Front apps
+    'front.website',
 
     'login',
 )

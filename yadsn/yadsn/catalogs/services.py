@@ -5,7 +5,7 @@ Services catalog.
 from pybinder import Catalog
 from pybinder.decorators import provides, requires
 
-import codecha
+import backend.codecha
 
 
 class ServicesCatalog(Catalog):
@@ -16,10 +16,10 @@ class ServicesCatalog(Catalog):
     @requires('codecha_keys', from_namespace='settings')
     def provide_codecha_client(self, codecha_keys):
         """
-        :rtype: codecha.CodechaClient
+        :rtype: backend.codecha.CodechaClient
         """
-        return codecha.CodechaClient(codecha_keys['public_key'],
-                                     codecha_keys['private_key'])
+        return backend.codecha.CodechaClient(codecha_keys['public_key'],
+                                             codecha_keys['private_key'])
 
 
 catalog = ServicesCatalog()

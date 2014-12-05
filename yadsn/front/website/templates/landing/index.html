@@ -4,7 +4,7 @@
     <title>YADSN</title>
 </head>
 <body>
-<form action="{% url 'website:landing' %}" method="POST" onsubmit="this.codecha_language.value = codecha.language">
+<form action="{% url 'front.website:landing' %}" method="POST" onsubmit="this.codecha_language.value = codecha.language">
     {% csrf_token %}
     <script type="text/javascript" src="//codecha.org/api/challenge?k={{form.codecha_client.public_key}}"> </script>
     {% for field in form.visible_fields %}

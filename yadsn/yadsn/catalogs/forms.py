@@ -6,7 +6,7 @@ from pybinder import Catalog
 from pybinder.decorators import provides, requires
 
 import login.forms
-import users.forms
+import backend.users.forms
 
 
 class FormsCatalog(Catalog):
@@ -26,7 +26,7 @@ class FormsCatalog(Catalog):
         """
         :rtype: users.forms.SubscriptionForm
         """
-        return users.forms.SubscriptionForm(*args, **kwargs)
+        return backend.users.forms.SubscriptionForm(*args, **kwargs)
 
 
 catalog = FormsCatalog()
