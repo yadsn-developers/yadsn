@@ -115,5 +115,5 @@ class Registration(View):
         
         if form.is_valid():
             user = self.user_model.create(**form.cleaned_data)
-        # Etc...
+        # ...
 ```
