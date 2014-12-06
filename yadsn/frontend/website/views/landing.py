@@ -3,11 +3,11 @@ from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-from yadsn.catalogs import inject, inject_provider
+from djpybinder import inject, inject_provider
 
 
-@inject('subscriptions', from_namespace='users')
-@inject_provider('subscription_form', from_namespace='users')
+@inject('subscriptions', from_namespace='users.models')
+@inject_provider('subscription_form', from_namespace='users.forms')
 class Landing(View):
 
     TEMPLATE = 'landing/index.html'
