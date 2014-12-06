@@ -3,33 +3,21 @@ from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-from yadsn.catalogs import forms, models
+from yadsn.catalogs import inject, inject_provider
 
 
-@models.inject('subscriptions')
-@forms.inject_provider('subscription_form')
+@inject('subscriptions', from_namespace='users')
+@inject_provider('subscription_form', from_namespace='users')
 class Landing(View):
 
     TEMPLATE = 'landing/index.html'
 
     def get(self, request):
-        """
-        Landing index page.
-
-        :param request:
-        :return:
-        """
         return render(request,
                       self.TEMPLATE,
                       {'form': self.subscription_form()})
 
     def post(self, request):
-        """
-        Landing subscribe handler.
-
-        :param request:
-        :return:
-        """
         additional_data = {'client_ip': _get_ip(request),
                            'http_referrer': request.META['HTTP_REFERER']}
         form = self.subscription_form(dict(request.POST.items() +

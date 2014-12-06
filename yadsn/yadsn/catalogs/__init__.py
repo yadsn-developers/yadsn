@@ -6,6 +6,8 @@ from pybinder import Container, Catalog
 from pybinder.providers import Value
 from . import forms, models, services
 
+import backend.users.catalog
+
 from django.conf import settings
 
 
@@ -19,11 +21,14 @@ def get_settings_catalog(settings, namespace='settings'):
     return catalog
 
 
-container = Container(forms.catalog, models.catalog, services.catalog,
+container = Container(backend.users.catalog.app,
+                      forms.catalog,
+                      models.catalog,
+                      services.catalog,
                       get_settings_catalog(settings))
 container.assemble()
 
-forms = container.namespace('forms')
-models = container.namespace('models')
+inject = container.inject
+inject_provider = container.inject_provider
 
-__all__ = ['forms', 'models']
+__all__ = ['inject', 'inject_provider']
