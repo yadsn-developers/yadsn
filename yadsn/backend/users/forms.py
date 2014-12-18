@@ -3,6 +3,7 @@ User forms.
 """
 
 from django import forms
+from django.contrib.auth import authenticate
 
 
 class SubscriptionForm(forms.Form):
@@ -45,3 +46,10 @@ class SubscriptionForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=255, required=True)
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+    def clean(self):
+        cleaned_data = super(LoginForm, self).clean()
+        user = authenticate(**cleaned_data)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Invalid login credentials")
+        return cleaned_data
