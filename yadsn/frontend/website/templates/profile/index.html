@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+username: {{ user.username }}
+<br>
+email: {{ user.email }}
+<br>
+Authenticated = {{ user.is_authenticated }}
+<br>
+<a href = {% url 'website:logout' %}>logout</a>
+</body>
+</html>
