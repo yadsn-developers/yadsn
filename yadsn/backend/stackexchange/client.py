@@ -1,8 +1,8 @@
 """
-Stackexchange access.
+Stackexchange access client.
 """
 
-from requests import Request
+import requests
 from django.shortcuts import redirect
 
 class StackexchangeClient(object):
@@ -11,23 +11,40 @@ class StackexchangeClient(object):
     """
     AUTH_URL= 'https://stackexchange.com/oauth'
     TOKEN_URL = 'https://stackexchange.com/oauth/access_token'
-    REDIRECT_URI = 'http://yadsn.com'
+    API_URL = 'https://api.stackexchange.com/2.2'
 
-    def __init__(self, client_id, client_secret, key):
+    def __init__(self, client_id, scope, client_secret, key, redirect_uri):
         self.client_id = client_id
+        self.scope = scope
         self.client_secret = client_secret
         self.key = key
+        self.redirect_uri = redirect_uri
 
     def connect(self):
         params = {
             'client_id': self.client_id,
-            'scope': '',
-            'redirect_uri': self.REDIRECT_URI}
-        response = Request('GET', url=self.AUTH_URL, params=params).prepare()
+            'scope': self.scope,
+            'redirect_uri': self.redirect_uri}
+        response = requests.Request('GET', url=self.AUTH_URL, params=params).prepare()
         return redirect(response.url)
 
-    def get_token(self):
-        pass
+    def get_token(self, code):
+        api_response = requests.post(
+            url=self.TOKEN_URL,
+            data={
+                'client_id': self.client_id,
+                'client_secret': self.client_secret,
+                'code': code,
+                'redirect_uri': self.REDIRECT_URI,
+            },
+            headers={'Content-type': 'application/x-www-form-urlencoded'}
+        )
+        return api_response.json()['access_token']
 
-    def get_user(self):
-        pass
+    def get_se_user(self, access_token):
+        url = self.API_URL + '/me'
+        api_response = requests.get(
+            url=url,
+            headers={'authorization': 'token %s' % access_token}
+        )
+        return api_response.json()

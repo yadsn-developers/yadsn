@@ -98,10 +98,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Keys for Codecha - developers captcha
+
 CODECHA_KEYS = {
     'public_key': 'c717b24a797041b79d27e54ed6cee53b',
     'private_key': '3856e53084634b6b8e82f9bf26cb6c30'
 }
+
+# Keys for Stackexchange integration
+
+SE_REDIRECT_URI = 'http://yadsn.com/stackexchange_callback'
+
+# User login/logout urls
 
 LOGIN_URL = 'website:login'
 LOGOUT_URL = 'website:logout'
