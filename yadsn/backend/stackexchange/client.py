@@ -39,6 +39,7 @@ class StackexchangeClient(object):
             },
             headers={'Content-type': 'application/x-www-form-urlencoded'}
         )
+        print api_response
         return api_response
 
 # https://api.stackexchange.com/2.2/me?key=U4DMV*8nvpm3EOpvf69Rxw((&site=stackoverflow&order=desc&sort=reputation&access_token=b3rbZN0JEXQRqDPnGBJnuA))&filter=default
