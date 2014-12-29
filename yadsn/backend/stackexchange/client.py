@@ -26,7 +26,7 @@ class StackexchangeClient(object):
             'scope': self.scope,
             'redirect_uri': self.redirect_uri}
         response = requests.Request('GET', url=self.AUTH_URL, params=params).prepare()
-        return redirect(response.url)
+        return response
 
     def get_token(self, code):
         api_response = requests.post(
@@ -35,11 +35,13 @@ class StackexchangeClient(object):
                 'client_id': self.client_id,
                 'client_secret': self.client_secret,
                 'code': code,
-                'redirect_uri': self.REDIRECT_URI,
+                'redirect_uri': self.redirect_uri,
             },
             headers={'Content-type': 'application/x-www-form-urlencoded'}
         )
         return api_response.json()['access_token']
+
+# https://api.stackexchange.com/2.2/me?key=U4DMV*8nvpm3EOpvf69Rxw((&site=stackoverflow&order=desc&sort=reputation&access_token=b3rbZN0JEXQRqDPnGBJnuA))&filter=default
 
     def get_se_user(self, access_token):
         url = self.API_URL + '/me'

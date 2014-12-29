@@ -107,7 +107,10 @@ CODECHA_KEYS = {
 
 # Keys for Stackexchange integration
 
-SE_REDIRECT_URI = 'http://yadsn.com/stackexchange_callback'
+SE_REDIRECT_URI = 'http://54.88.90.164/web/se-callback'
+SE_CLIENT_ID = '4052'
+SE_CLIENT_SECRET = 'yDtG2OvezA5oef1iV40Jcg(('
+SE_KEY = 'sllwzBQ)tl)*d4XpojOWVA(('
 
 # User login/logout urls
 
