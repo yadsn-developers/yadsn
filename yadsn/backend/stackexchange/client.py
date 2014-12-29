@@ -47,6 +47,11 @@ class StackexchangeClient(object):
         url = self.API_URL + '/me'
         api_response = requests.get(
             url=url,
-            headers={'authorization': 'token %s' % access_token}
-        )
+            data={'key': self.key,
+                  'site': 'stackoverflow',
+                  'order': 'desc',
+                  'sort': 'reputation',
+                  'access_token': access_token,
+                  'filter': 'default',
+                  })
         return api_response.json()
