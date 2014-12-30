@@ -17,8 +17,8 @@ class SeCallback(View):
                            client_secret=settings.SE_CLIENT_SECRET,
                            key=settings.SE_KEY,
                            redirect_uri=settings.SE_REDIRECT_URI)
-        access_token = se_client.get_token(request.GET['code'])
-        se_user = se_client.get_se_user(access_token)
+        token = se_client.get_token(request.GET['code'])
+        se_user = se_client.get_se_user(token['access_token'])
         return render(request,
                       self.TEMPLATE,
                       {'user': request.user,

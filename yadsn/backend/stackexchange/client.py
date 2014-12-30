@@ -3,7 +3,7 @@ Stackexchange access client.
 """
 
 import requests
-from django.shortcuts import redirect
+import urlparse
 
 class StackexchangeClient(object):
     """
@@ -39,8 +39,7 @@ class StackexchangeClient(object):
             },
             headers={'Content-type': 'application/x-www-form-urlencoded'}
         )
-        print api_response.text
-        return api_response
+        return urlparse.parse_qs(api_response.text)
 
 # https://api.stackexchange.com/2.2/me?key=U4DMV*8nvpm3EOpvf69Rxw((&site=stackoverflow&order=desc&sort=reputation&access_token=b3rbZN0JEXQRqDPnGBJnuA))&filter=default
 
