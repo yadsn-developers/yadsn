@@ -14,6 +14,6 @@ urlpatterns = [
     url(r'^login/$', Login.as_view(), name='login'),
     url(r'^logout/$', Logout.as_view(), name='logout'),
     url(r'^profile/$', login_required(Profile.as_view()), name='profile'),
-    url(r'^se-connect/$', SeConnect.as_view(), name='se_connect'),
-    url(r'^se-callback/$', SeCallback.as_view(), name='se_callback'),
+    url(r'^se-connect/$', login_required(SeConnect.as_view()), name='se_connect'),
+    url(r'^se-callback/$', login_required(SeCallback.as_view()), name='se_callback'),
 ]

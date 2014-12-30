@@ -98,6 +98,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# User login/logout urls
+
+LOGIN_URL = 'website:login'
+LOGOUT_URL = 'website:logout'
+
 # Keys for Codecha - developers captcha
 
 CODECHA_KEYS = {
@@ -106,13 +111,10 @@ CODECHA_KEYS = {
 }
 
 # Keys for Stackexchange integration
-
-SE_REDIRECT_URI = 'http://54.88.90.164/web/se-callback'
-SE_CLIENT_ID = '4052'
-SE_CLIENT_SECRET = 'yDtG2OvezA5oef1iV40Jcg(('
-SE_KEY = 'sllwzBQ)tl)*d4XpojOWVA(('
-
-# User login/logout urls
-
-LOGIN_URL = 'website:login'
-LOGOUT_URL = 'website:logout'
+STACKEXCHANGE_KEYS = {
+    'redirect_uri': 'http://54.88.90.164/web/se-callback',
+    'scope': '',
+    'client_id': '4052',
+    'client_secret': 'yDtG2OvezA5oef1iV40Jcg((',
+    'key': 'sllwzBQ)tl)*d4XpojOWVA((',
+}
