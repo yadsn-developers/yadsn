@@ -6,11 +6,11 @@ from backend.stackexchange.client import StackexchangeClient
 from django.conf import settings
 
 # TODO: mock the SE user response
+# TODO: exception handling
 # TODO: se_client instance duplication
 # TODO: profile render duplication
 # TODO: inject SE client
 # TODO: move settings out from git
-# TODO: exception handling
 
 
 class SeCallback(View):
