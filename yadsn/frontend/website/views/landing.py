@@ -3,30 +3,34 @@ from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-from djpybinder import inject, inject_provider
+
+import objects
 
 
-@inject('subscriptions', from_namespace='users.models')
-@inject_provider('subscription_form', from_namespace='users.forms')
 class Landing(View):
 
     TEMPLATE = 'landing/index.html'
 
-    def get(self, request):
+    @objects.inject('subscription_form')
+    def get(self, request, subscription_form):
         return render(request,
                       self.TEMPLATE,
-                      {'form': self.subscription_form()})
+                      {'form': subscription_form})
 
-    def post(self, request):
+    @objects.inject('subscription_form', like='form')
+    @objects.inject('subscriptions_manager', like='subscriptions')
+    def post(self, request, form, subscriptions):
         additional_data = {'client_ip': _get_ip(request),
                            'http_referrer': request.META['HTTP_REFERER']}
-        form = self.subscription_form(dict(request.POST.items() +
-                                           additional_data.items()))
+
+        form.data = dict(request.POST.items() + additional_data.items())
+        form.is_bound = True
+
         if not form.is_valid():
             return render(request, self.TEMPLATE, {'form': form})
 
         try:
-            self.subscriptions.subscribe(**form.cleaned_data)
+            subscriptions.subscribe(**form.cleaned_data)
         except ValidationError as exception:
             if exception.message_dict:
                 for field, errors in exception.message_dict.iteritems():
