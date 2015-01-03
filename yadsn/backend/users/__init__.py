@@ -4,39 +4,33 @@ Users catalog.
 
 import objects
 
+from backend.codecha import CodechaClient
 from .models import user
 from .models import auth
 from . import forms
 
 
-@objects.register('users_manager')
+@objects.register(user.Users)
 class UserManager(objects.Provider):
-    def provide(self):
-        return user.Users()
+    pass
 
 
-@objects.register('subscriptions_manager')
+@objects.register(user.Subscriptions)
 class SubscriptionsManager(objects.Provider):
-    def provide(self):
-        return user.Subscriptions()
+    pass
 
 
-@objects.register('auth_manager')
+@objects.register(auth.Auth)
 class AuthManager(objects.Provider):
-    def provide(self):
-        return auth.Auth()
+    pass
 
 
-@objects.register('login_form')
+@objects.register(forms.LoginForm)
 class LoginForm(objects.Provider):
-    def provide(self):
-        def login_form_factory(*args, **kwargs):
-            return forms.LoginForm(*args, **kwargs)
-        return login_form_factory
+    pass
 
 
-@objects.register('subscription_form')
+@objects.register(forms.SubscriptionForm)
+@objects.inject(codecha_client=CodechaClient)
 class SubscriptionForm(objects.Provider):
-    @objects.inject('codecha_client')
-    def provide(self, *args, **kwargs):
-        return forms.SubscriptionForm(*args, **kwargs)
+    pass

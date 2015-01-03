@@ -1,41 +1,55 @@
+"""
+`Objects` library.
+"""
 
 from functools import wraps
+from inspect import isclass
+
 
 PROVIDERS = dict()
 
 
-def register(alias):
-    def decorator(provider_cls):
-        PROVIDERS[alias] = provider_cls()
-        return provider_cls
-    return decorator
+class Provider(object):
+
+    injections = {}
+
+    def __init__(self, cls):
+        self.cls = cls
+        self.injections = self.injections.copy()
+
+    def provide(self):
+        return self.cls(**dict((
+            (name, PROVIDERS[provider].provide())
+            for name, provider in self.injections.iteritems()
+        )))
 
 
-def override(alias):
-    def decorator(provider_cls):
-        PROVIDERS[alias] = provider_cls()
-        return provider_cls
-    return decorator
+def register(cls):
+    def decorated(provider):
+        PROVIDERS[provider] = provider(cls)
+        return provider
+    return decorated
 
 
-def inject(alias, like=None):
-    if not like:
-        like = alias
+# def override(alias):
+#     def decorator(provider_cls):
+#         PROVIDERS[alias] = provider_cls()
+#         return provider_cls
+#     return decorator
 
+
+def inject(**injections):
     def decorator(callback):
+
+        if isclass(callback) and issubclass(callback, Provider):
+            callback.injections.update(injections)
+            return callback
+
         @wraps(callback)
         def decorated(*args, **kwargs):
-            if like not in kwargs:
-                kwargs[like] = PROVIDERS[alias].provide()
+            for name, provider in injections.iteritems():
+                if name not in kwargs:
+                    kwargs[name] = PROVIDERS[provider].provide()
             return callback(*args, **kwargs)
         return decorated
     return decorator
-
-
-class Provider(object):
-
-    def provide(self):
-        raise NotImplementedError()
-
-    def provider(self):
-        return lambda *args, **kwargs: self.provide(*args, **kwargs)

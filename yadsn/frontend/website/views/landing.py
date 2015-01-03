@@ -5,20 +5,21 @@ from django.http import HttpResponse
 from django.forms.util import ErrorList
 
 import objects
+from backend import users
 
 
 class Landing(View):
 
     TEMPLATE = 'landing/index.html'
 
-    @objects.inject('subscription_form')
-    def get(self, request, subscription_form):
+    @objects.inject(form=users.SubscriptionForm)
+    def get(self, request, form):
         return render(request,
                       self.TEMPLATE,
-                      {'form': subscription_form})
+                      {'form': form})
 
-    @objects.inject('subscription_form', like='form')
-    @objects.inject('subscriptions_manager', like='subscriptions')
+    @objects.inject(form=users.SubscriptionForm)
+    @objects.inject(subscriptions=users.SubscriptionsManager)
     def post(self, request, form, subscriptions):
         additional_data = {'client_ip': _get_ip(request),
                            'http_referrer': request.META['HTTP_REFERER']}
