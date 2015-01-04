@@ -4,7 +4,15 @@ from . import client
 from django.conf import settings
 
 
-@objects.register(client.CodechaClient)
-class CodechaClient(objects.Provider):
-    def provide(self):
-        return self.cls(**settings.CODECHA_KEYS)
+class Catalog(objects.Catalog):
+    """
+    Objects catalog.
+    """
+
+    codecha_client = objects.NewInstance(
+        provides=client.CodechaClient,
+        **settings.CODECHA_KEYS
+    )
+    """
+    :type: (objects.Provider) -> client.CodechaClient
+    """

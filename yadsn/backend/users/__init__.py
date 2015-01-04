@@ -4,33 +4,42 @@ Users catalog.
 
 import objects
 
-from backend.codecha import CodechaClient
 from .models import user
 from .models import auth
 from . import forms
 
-
-@objects.register(user.Users)
-class UserManager(objects.Provider):
-    pass
+from backend import codecha
 
 
-@objects.register(user.Subscriptions)
-class SubscriptionsManager(objects.Provider):
-    pass
+class Catalog(objects.Catalog):
+    """
+    Objects catalog.
+    """
 
+    users_manager = objects.Singleton(provides=user.Users)
+    """
+    :type: (objects.Provider) -> user.Users
+    """
 
-@objects.register(auth.Auth)
-class AuthManager(objects.Provider):
-    pass
+    subscriptions_manager = objects.Singleton(provides=user.Subscriptions)
+    """
+    :type: (objects.Provider) -> user.Subscriptions
+    """
 
+    auth_manager = objects.Singleton(provides=auth.Auth)
+    """
+    :type: (objects.Provider) -> auth.Auth
+    """
 
-@objects.register(forms.LoginForm)
-class LoginForm(objects.Provider):
-    pass
+    login_form = objects.NewInstance(provides=forms.LoginForm)
+    """
+    :type: (objects.Provider) -> forms.LoginForm
+    """
 
-
-@objects.register(forms.SubscriptionForm)
-@objects.inject(codecha_client=CodechaClient)
-class SubscriptionForm(objects.Provider):
-    pass
+    subscriptions_form = objects.NewInstance(
+        provides=forms.SubscriptionForm,
+        codecha_client=codecha.Catalog.codecha_client
+    )
+    """
+    :type: (objects.Provider) -> forms.SubscriptionForm
+    """

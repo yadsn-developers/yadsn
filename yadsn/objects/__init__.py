@@ -2,54 +2,42 @@
 `Objects` library.
 """
 
-from functools import wraps
-from inspect import isclass
 
-
-PROVIDERS = dict()
+class Catalog(object):
+    def __init__(self, *args):
+        pass
 
 
 class Provider(object):
-
-    injections = {}
-
-    def __init__(self, cls):
-        self.cls = cls
-        self.injections = self.injections.copy()
-
-    def provide(self):
-        return self.cls(**dict((
-            (name, PROVIDERS[provider].provide())
-            for name, provider in self.injections.iteritems()
-        )))
+    def __call__(self, *args, **kwargs):
+        raise NotImplementedError()
 
 
-def register(cls):
-    def decorated(provider):
-        PROVIDERS[provider] = provider(cls)
-        return provider
-    return decorated
+class NewInstance(Provider):
+    def __init__(self, provides, **dependencies):
+        self.provides = provides
+        self.dependencies = dependencies
+
+    def __call__(self, *args, **kwargs):
+        for name, dependency in self.dependencies.iteritems():
+            if name in kwargs:
+                continue
+
+            if isinstance(dependency, Provider):
+                value = dependency.__call__()
+            else:
+                value = dependency
+
+            kwargs[name] = value
+        return self.provides(*args, **kwargs)
 
 
-# def override(alias):
-#     def decorator(provider_cls):
-#         PROVIDERS[alias] = provider_cls()
-#         return provider_cls
-#     return decorator
+class Singleton(NewInstance):
+    def __init__(self, *args, **kwargs):
+        self.instance = None
+        super(Singleton, self).__init__(*args, **kwargs)
 
-
-def inject(**injections):
-    def decorator(callback):
-
-        if isclass(callback) and issubclass(callback, Provider):
-            callback.injections.update(injections)
-            return callback
-
-        @wraps(callback)
-        def decorated(*args, **kwargs):
-            for name, provider in injections.iteritems():
-                if name not in kwargs:
-                    kwargs[name] = PROVIDERS[provider].provide()
-            return callback(*args, **kwargs)
-        return decorated
-    return decorator
+    def __call__(self, *args, **kwargs):
+        if not self.instance:
+            self.instance = super(Singleton, self).__call__(*args, **kwargs)
+        return self.instance
