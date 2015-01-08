@@ -125,7 +125,6 @@ class StackexchangeClientMock(object):
         :return: request for further redirection
         """
         params = {'code': '123456'}
-        # TODO: get redirect uri from local settings
         response = requests.Request('GET', url=self.redirect_uri, params=params).prepare()
         return response
 

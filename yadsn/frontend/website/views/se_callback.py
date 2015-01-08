@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from djpybinder import inject, inject_provider
 from django.conf import settings
 
-# TODO: move settings out from git https://stackoverflow.com/questions/4909958/django-local-settings
 # TODO: exception handling
 # TODO: profile render duplication [template extension]
 
