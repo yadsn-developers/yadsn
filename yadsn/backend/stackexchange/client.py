@@ -93,7 +93,7 @@ class StackexchangeClient(object):
 
 class StackexchangeClientMock(object):
     """
-    Test Stackexchange client.
+    Stackexchange client mock.
     """
     def __init__(self, client_id, scope, client_secret, key, redirect_uri):
         """
@@ -126,7 +126,7 @@ class StackexchangeClientMock(object):
         """
         params = {'code': '123456'}
         # TODO: get redirect uri from local settings
-        response = requests.Request('GET', url='http://127.0.0.1:8000/web/se-callback', params=params).prepare()
+        response = requests.Request('GET', url=self.redirect_uri, params=params).prepare()
         return response
 
     def get_token(self, code):

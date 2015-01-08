@@ -9,20 +9,19 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = ''
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(u2)my^s79khz@4_24y%exz&_lbmoy7n=f$syv^9v(6nm#eca@'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -72,12 +71,7 @@ WSGI_APPLICATION = 'yadsn.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = {}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -105,16 +99,12 @@ LOGOUT_URL = 'website:logout'
 
 # Keys for Codecha - developers captcha
 
-CODECHA_KEYS = {
-    'public_key': 'c717b24a797041b79d27e54ed6cee53b',
-    'private_key': '3856e53084634b6b8e82f9bf26cb6c30'
-}
+CODECHA_KEYS = {}
 
 # Keys for Stackexchange integration
-STACKEXCHANGE_KEYS = {
-    'redirect_uri': 'http://54.88.90.164/web/se-callback',
-    'scope': '',
-    'client_id': '4052',
-    'client_secret': 'yDtG2OvezA5oef1iV40Jcg((',
-    'key': 'sllwzBQ)tl)*d4XpojOWVA((',
-}
+STACKEXCHANGE_KEYS = {}
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
