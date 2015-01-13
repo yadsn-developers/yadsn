@@ -15,6 +15,8 @@ Authenticated = {{ user.is_authenticated }}
 <br>
 <a href = {% url 'website:logout' %}>logout</a>
 <br>
-{{ se_user }}
+{% block stackexchange %}
+{{ se_user|default:"Please connect to StackExcnhange" }}
+{% endblock stackexchange %}
 </body>
 </html>

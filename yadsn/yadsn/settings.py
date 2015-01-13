@@ -105,7 +105,9 @@ LOGOUT_URL = 'website:logout'
 CODECHA_KEYS = {}
 
 # Keys for Stackexchange integration
-STACKEXCHANGE_KEYS = {}
+
+STACKEXCHANGE_CLIENT_KEYS = {}
+STACKEXCHANGE_MANAGER_KEYS = {}
 
 try:
     from local_settings import *

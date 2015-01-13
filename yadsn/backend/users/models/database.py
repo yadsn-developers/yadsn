@@ -15,7 +15,11 @@ class Subscriber(models.Model):
 
 class StackExchangeProfile(models.Model):
     access_token = models.CharField(max_length=100)
+    expires = models.IntegerField()
 
 
 class User(AbstractUser):
     se_profile = models.OneToOneField(StackExchangeProfile, null=True)
+
+    def has_se_profile(self):
+        return bool(self.se_profile)

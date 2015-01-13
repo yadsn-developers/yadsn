@@ -4,7 +4,7 @@ from .models import Subscriber, User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'se_profile')
+    list_display = ('username', 'email', 'has_se_profile')
 
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
