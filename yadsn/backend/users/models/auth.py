@@ -3,6 +3,7 @@ Auth models.
 """
 from django.contrib.auth import authenticate, login, logout
 
+
 class Auth(object):
     """
     Auth model.

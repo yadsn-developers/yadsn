@@ -66,6 +66,10 @@ ROOT_URLCONF = 'yadsn.urls'
 
 WSGI_APPLICATION = 'yadsn.wsgi.application'
 
+# Overriding the base User model
+
+AUTH_USER_MODEL = 'users.User'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
