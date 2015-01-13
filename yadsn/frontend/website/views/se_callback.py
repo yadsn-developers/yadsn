@@ -4,10 +4,10 @@ from django.http import HttpResponse
 from djpybinder import inject, inject_provider
 from django.conf import settings
 
-# TODO: exception handling
 # TODO: profile render duplication [template extension]
-
+# TODO: exception handling
 # TODO: inject SE client
+
 
 class SeCallback(View):
 

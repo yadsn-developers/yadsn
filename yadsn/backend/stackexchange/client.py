@@ -5,6 +5,7 @@ Stackexchange access client.
 import requests
 import urlparse
 
+
 class StackexchangeClient(object):
     """
     Stackexchange client.
@@ -90,6 +91,7 @@ class StackexchangeClient(object):
                   'filter': 'default',
                   })
         return api_response.json()
+
 
 class StackexchangeClientMock(object):
     """

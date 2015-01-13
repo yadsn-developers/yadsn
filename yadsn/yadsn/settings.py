@@ -40,12 +40,11 @@ INSTALLED_APPS = (
 
     # Backend apps
     'backend.codecha',
+    'backend.stackexchange',
     'backend.users',
 
     # Front apps
     'frontend.website',
-
-    'login',
 )
 
 DJPYBINDER_CATALOGS = (
