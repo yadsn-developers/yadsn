@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='se_profile',
-            field=models.OneToOneField(null=True, to='users.StackExchangeProfile'),
+            field=models.OneToOneField(null=True, blank=True, to='users.StackExchangeProfile'),
             preserve_default=True,
         ),
         migrations.AddField(

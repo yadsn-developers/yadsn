@@ -23,10 +23,10 @@ class Users(object):
         self.user.se_profile = se_profile
         self.user.save()
 
-    def fill_se_profile(self):
+    def fill_se_profile(self, param):
         se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
         data = se_client.get_se_user_param(access_token=self.user.se_profile.access_token,
-                                           param=['reputation', 'link'])
+                                           param=param)
         self.user.se_profile.fill_profile(**data)
         self.user.se_profile.save()
 

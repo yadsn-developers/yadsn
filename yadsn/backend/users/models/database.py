@@ -19,13 +19,13 @@ class StackExchangeProfile(models.Model):
     reputation = models.IntegerField(null=True)
     link = models.URLField(null=True)
 
-    def fill_profile(self, reputation, link):
-        self.reputation = reputation
-        self.link = link
+    def fill_profile(self, **kwargs):
+        for attr, value in kwargs.iteritems():
+            setattr(self, attr, value)
 
 
 class User(AbstractUser):
-    se_profile = models.OneToOneField(StackExchangeProfile, null=True)
+    se_profile = models.OneToOneField(StackExchangeProfile, null=True, blank=True)
 
     def has_se_profile(self):
         return bool(self.se_profile)
