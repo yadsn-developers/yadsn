@@ -11,12 +11,14 @@ email: {{ user.email }}
 <br>
 Authenticated = {{ user.is_authenticated }}
 <br>
-<a href = {% url 'website:se_connect' %}>Connect to Stackexchange</a>
+{% block stackexchange %}
+    {% if user.has_se_profile %}
+        SE reputation: <a href = {{ user.se_profile.link }}>{{ user.se_profile.reputation }}</a>
+    {% else %}
+        <a href = {% url 'website:se_connect' %}>Connect to Stackexchange</a>
+    {% endif %}
+{% endblock stackexchange %}
 <br>
 <a href = {% url 'website:logout' %}>logout</a>
-<br>
-{% block stackexchange %}
-{{ se_user|default:"Please connect to StackExcnhange" }}
-{% endblock stackexchange %}
 </body>
 </html>

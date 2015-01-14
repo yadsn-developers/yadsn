@@ -106,8 +106,7 @@ CODECHA_KEYS = {}
 
 # Keys for Stackexchange integration
 
-STACKEXCHANGE_CLIENT_KEYS = {}
-STACKEXCHANGE_MANAGER_KEYS = {}
+STACKEXCHANGE_KEYS = {}
 
 try:
     from local_settings import *

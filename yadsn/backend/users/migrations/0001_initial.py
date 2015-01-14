@@ -41,6 +41,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('access_token', models.CharField(max_length=100)),
+                ('expires', models.IntegerField()),
+                ('reputation', models.IntegerField(null=True)),
+                ('link', models.URLField(null=True)),
             ],
             options={
             },

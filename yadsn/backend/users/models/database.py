@@ -16,6 +16,12 @@ class Subscriber(models.Model):
 class StackExchangeProfile(models.Model):
     access_token = models.CharField(max_length=100)
     expires = models.IntegerField()
+    reputation = models.IntegerField(null=True)
+    link = models.URLField(null=True)
+
+    def fill_profile(self, reputation, link):
+        self.reputation = reputation
+        self.link = link
 
 
 class User(AbstractUser):

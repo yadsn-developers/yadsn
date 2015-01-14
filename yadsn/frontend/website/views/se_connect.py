@@ -6,5 +6,5 @@ from django.conf import settings
 class SeConnect(View):
 
     def get(self, request):
-        se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_CLIENT_KEYS)
+        se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
         return redirect(se_client.connect().url)
