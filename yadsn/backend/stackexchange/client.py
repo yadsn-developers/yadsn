@@ -93,6 +93,16 @@ class StackexchangeClient(object):
         return api_response.json()
 
     def get_se_user_param(self, access_token, param):
+        """
+        Returns a dictionary of Stackexchange user attributes.
+
+        :type access_token: str
+        :param access_token: access token
+        :type param: list
+        :param param: list of attributes
+        :rtype: dict
+        :return: StackExchange user attributes
+        """
         se_user = self.__get_se_user_dict(access_token)
         result = dict()
         for key in param:
@@ -180,6 +190,16 @@ class StackexchangeClientMock(object):
                 u'quota_max': 10000, u'quota_remaining': 9999}
 
     def get_se_user_param(self, access_token, param):
+        """
+        Returns a dictionary of Stackexchange user attributes.
+
+        :type access_token: str
+        :param access_token: access token
+        :type param: list
+        :param param: list of attributes
+        :rtype: dict
+        :return: StackExchange user attributes
+        """
         se_user = self.__get_se_user_dict(access_token)
         result = dict()
         for key in param:
