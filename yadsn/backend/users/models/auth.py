@@ -1,7 +1,9 @@
 """
 Auth models.
 """
+
 from django.contrib.auth import authenticate
+
 
 class Auth(object):
     """
@@ -9,5 +11,5 @@ class Auth(object):
     """
 
     def login(self, username, password):
-         user = authenticate(username=username, password=password)
-         return user
+        user = authenticate(username=username, password=password)
+        return user

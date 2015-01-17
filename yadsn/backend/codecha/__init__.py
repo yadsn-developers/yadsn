@@ -1,5 +1,5 @@
 """
-Codecha client.
+Codecha application.
 """
 
 from objects import Catalog
@@ -20,4 +20,4 @@ class Codecha(Catalog):
                                          settings.CODECHA_KEYS['public_key']),
                                  InitArg('private_key',
                                          settings.CODECHA_KEYS['private_key']))
-
+    """ :type: (objects.Provider) -> client.CodechaClient """
