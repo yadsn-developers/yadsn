@@ -12,7 +12,7 @@ class Users(object):
     Users model.
     """
 
-    def __init__(self, user):
+    def __init__(self):
         """
         Constructor.
 
@@ -20,9 +20,9 @@ class Users(object):
         :param user: User object
         :return:
         """
-        self.user = user
+        self.se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
 
-    def set_se_token(self, code):
+    def set_se_token(self, user, code):
         """
         Saves StackExchange token to a user model.
 
@@ -30,27 +30,25 @@ class Users(object):
         :param code: authorization code returned by StackExchange
         :return:
         """
-        se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
-        token = se_client.get_token(code)
+        token = self.se_client.get_token(code)
         se_profile = StackExchangeProfile(**token)
         se_profile.save()
-        self.user.se_profile = se_profile
-        self.user.save()
+        user.se_profile = se_profile
+        user.save()
 
-    def fill_se_profile(self, param):
+    def fill_se_profile(self, user, params):
         """
         Saves StackExchange profile attributes to a user model.
 
-        :type param: list
-        :param param: list of attributes
+        :type params: list
+        :param params: list of attributes
         :return:
         """
-        se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
-        # Todo: manage assumption that a user has a token
-        data = se_client.get_se_user_param(access_token=self.user.se_profile.access_token,
-                                           param=param)
-        self.user.se_profile.fill_profile(**data)
-        self.user.se_profile.save()
+        # Todo: manage assumption that user has a token
+        data = self.se_client.get_user_param(access_token=user.se_profile.access_token,
+                                           params=params)
+        user.se_profile.fill_profile(**data)
+        user.se_profile.save()
 
 
 class Subscriptions(object):

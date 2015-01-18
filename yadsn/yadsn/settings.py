@@ -108,6 +108,10 @@ CODECHA_KEYS = {}
 
 STACKEXCHANGE_KEYS = {}
 
+# Stackexchange client class
+
+SE_CLIENT_CLS = ''
+
 try:
     from local_settings import *
 except ImportError:

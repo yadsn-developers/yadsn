@@ -71,7 +71,7 @@ class StackexchangeClient(object):
         )
         return urlparse.parse_qs(api_response.text)
 
-    def __get_se_user_dict(self, access_token):
+    def __get_user_dict(self, access_token):
         """
         Retrieves StackExchange user via /me method.
 
@@ -92,21 +92,21 @@ class StackexchangeClient(object):
                   })
         return api_response.json()
 
-    def get_se_user_param(self, access_token, param):
+    def get_user_param(self, access_token, params):
         """
         Returns a dictionary of Stackexchange user attributes.
 
         :type access_token: str
         :param access_token: access token
-        :type param: list
-        :param param: list of attributes
+        :type params: list
+        :param params: list of attributes
         :rtype: dict
         :return: StackExchange user attributes
         """
-        se_user = self.__get_se_user_dict(access_token)
+        user = self.__get_user_dict(access_token)
         result = dict()
-        for key in param:
-            result[key] = se_user['items'][0][key]
+        for key in params:
+            result[key] = user['items'][0][key]
         return result
 
 
@@ -158,7 +158,7 @@ class StackexchangeClientMock(object):
         """
         return {'access_token': 'abcd123abcd123abcd123', 'expires': 1234}
 
-    def __get_se_user_dict(self, access_token):
+    def __get_user_dict(self, access_token):
         """
         Retrieves StackExchange user via /me method.
 
@@ -189,19 +189,19 @@ class StackexchangeClientMock(object):
                             u'reputation_change_day': 0}],
                 u'quota_max': 10000, u'quota_remaining': 9999}
 
-    def get_se_user_param(self, access_token, param):
+    def get_user_param(self, access_token, params):
         """
         Returns a dictionary of Stackexchange user attributes.
 
         :type access_token: str
         :param access_token: access token
-        :type param: list
-        :param param: list of attributes
+        :type params: list
+        :param params: list of attributes
         :rtype: dict
         :return: StackExchange user attributes
         """
-        se_user = self.__get_se_user_dict(access_token)
+        user = self.__get_user_dict(access_token)
         result = dict()
-        for key in param:
-            result[key] = se_user['items'][0][key]
+        for key in params:
+            result[key] = user['items'][0][key]
         return result
