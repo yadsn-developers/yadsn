@@ -4,31 +4,32 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
 
-from backend.users.models.user import Subscriptions
-from backend.users.forms import SubscriptionForm
-from backend.codecha.client import CodechaClient
-from django.conf import settings
+from backend import users
 
 
 class Landing(View):
+
+    subscription_form = users.Catalog.subscription_form
+    subscriptions_model = users.Catalog.subscriptions_model
 
     TEMPLATE = 'landing/index.html'
 
     def get(self, request):
         return render(request,
                       self.TEMPLATE,
-                      {'form': SubscriptionForm(codecha_client=CodechaClient(**settings.CODECHA_KEYS))})
+                      {'form': self.subscription_form()})
 
     def post(self, request):
         additional_data = {'client_ip': _get_ip(request),
                            'http_referrer': request.META['HTTP_REFERER']}
-        form = SubscriptionForm(dict(request.POST.items() +
-                                     additional_data.items()), codecha_client=CodechaClient(**settings.CODECHA_KEYS))
+        form = self.subscription_form(dict(request.POST.items() +
+                                           additional_data.items()))
         if not form.is_valid():
             return render(request, self.TEMPLATE, {'form': form})
 
         try:
-            Subscriptions().subscribe(**form.cleaned_data)
+            self.subscriptions_model().subscribe(
+                **form.cleaned_data)
         except ValidationError as exception:
             if exception.message_dict:
                 for field, errors in exception.message_dict.iteritems():

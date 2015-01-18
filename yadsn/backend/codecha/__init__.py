@@ -2,7 +2,7 @@
 Codecha application.
 """
 
-from objects import Catalog
+from objects import Catalog as AbstractCatalog
 from objects.providers import NewInstance
 from objects.injections import InitArg
 
@@ -10,7 +10,7 @@ from . import client
 from django.conf import settings
 
 
-class Codecha(Catalog):
+class Catalog(AbstractCatalog):
     """
     Application objects catalog.
     """
