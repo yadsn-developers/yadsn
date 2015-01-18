@@ -2,7 +2,7 @@
 Codecha application.
 """
 
-from objects import Catalog as AbstractCatalog
+from objects import AbstractCatalog
 from objects.providers import NewInstance
 from objects.injections import InitArg
 

@@ -2,7 +2,7 @@
 Users application.
 """
 
-from objects import Catalog as AbstractCatalog
+from objects import AbstractCatalog
 from objects.providers import NewInstance, Singleton
 from objects.injections import InitArg
 
