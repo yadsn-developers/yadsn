@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.views.generic import View
 
 from backend import users
@@ -21,5 +20,7 @@ class Login(View):
         form = self.login_form(request.POST)
         if not form.is_valid():
             return render(request, self.TEMPLATE, {'form': form})
-        user = self.auth_model().login(**form.cleaned_data)
-        return HttpResponse("Hello " + user.username)
+        auth = self.auth_model()
+        user = auth.authenticate(**form.cleaned_data)
+        auth.login(request, user)
+        return redirect('website:profile')
