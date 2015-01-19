@@ -19,7 +19,7 @@ BASE_DIR = ''
 SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = False
 
@@ -102,10 +102,6 @@ CODECHA_KEYS = {}
 # Keys for Stackexchange integration
 
 STACKEXCHANGE_KEYS = {}
-
-# Stackexchange client class
-
-SE_CLIENT_CLS = ''
 
 try:
     from local_settings import *

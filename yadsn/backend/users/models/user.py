@@ -3,8 +3,7 @@ User models.
 """
 
 from .database import Subscriber
-from django.conf import settings
-from backend.users.models import StackExchangeProfile
+from .database import StackExchangeProfile
 
 
 class Users(object):
@@ -12,15 +11,11 @@ class Users(object):
     Users model.
     """
 
-    def __init__(self):
+    def __init__(self, stack_exchange):
         """
         Constructor.
-
-        :type user: User
-        :param user: User object
-        :return:
         """
-        self.se_client = settings.SE_CLIENT_CLS(**settings.STACKEXCHANGE_KEYS)
+        self.stack_exchange = stack_exchange
 
     def set_se_token(self, user, code):
         """
@@ -30,7 +25,7 @@ class Users(object):
         :param code: authorization code returned by StackExchange
         :return:
         """
-        token = self.se_client.get_token(code)
+        token = self.stack_exchange.get_token(code)
         se_profile = StackExchangeProfile(**token)
         se_profile.save()
         user.se_profile = se_profile
@@ -45,8 +40,8 @@ class Users(object):
         :return:
         """
         # Todo: manage assumption that user has a token
-        data = self.se_client.get_user_param(access_token=user.se_profile.access_token,
-                                           params=params)
+        data = self.stack_exchange.get_user_param(access_token=user.se_profile.access_token,
+                                                  params=params)
         user.se_profile.fill_profile(**data)
         user.se_profile.save()
 
