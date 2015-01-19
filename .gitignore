@@ -63,3 +63,6 @@ venv/
 
 # Sqlite
 *.sqlite*
+
+# Local settings
+local_settings.py
