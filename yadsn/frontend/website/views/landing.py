@@ -4,13 +4,14 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
 
-from backend import users
+from yadsn.catalogs import forms
+from yadsn.catalogs import models
 
 
 class Landing(View):
 
-    subscription_form = users.Catalog.subscription_form
-    subscriptions_model = users.Catalog.subscriptions_model
+    subscription_form = forms.Catalog.subscription
+    subscriptions_model = models.Catalog.subscriptions
 
     TEMPLATE = 'landing/index.html'
 
@@ -28,8 +29,7 @@ class Landing(View):
             return render(request, self.TEMPLATE, {'form': form})
 
         try:
-            self.subscriptions_model().subscribe(
-                **form.cleaned_data)
+            self.subscriptions_model().subscribe(**form.cleaned_data)
         except ValidationError as exception:
             if exception.message_dict:
                 for field, errors in exception.message_dict.iteritems():

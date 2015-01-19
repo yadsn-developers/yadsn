@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     # url(r'^login/', include('login.urls', namespace='login')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^web/', include('frontend.website.urls', namespace='website')),
+    url(r'^objects/', include('frontend.objects.urls', namespace='objects')),
 )

@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 
     # Front apps
     'frontend.website',
+    'frontend.objects',
 )
 
 

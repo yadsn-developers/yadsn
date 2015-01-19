@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from backend import users
+from yadsn.catalogs import forms
+from yadsn.catalogs import models
 
 
 class Login(View):
 
-    login_form = users.Catalog.login_form
-    auth_model = users.Catalog.auth_model
+    login_form = forms.Catalog.login
+    auth_model = models.Catalog.auth
 
     TEMPLATE = 'login/index.html'
 
