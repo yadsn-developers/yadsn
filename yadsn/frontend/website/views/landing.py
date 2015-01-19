@@ -3,11 +3,13 @@ from django.core.exceptions import ValidationError
 from django.views.generic import View
 from django.http import HttpResponse
 from django.forms.util import ErrorList
-from djpybinder import inject, inject_provider
+
+from backend.users.models.user import Subscriptions
+from backend.users.forms import SubscriptionForm
+from backend.codecha.client import CodechaClient
+from django.conf import settings
 
 
-@inject('subscriptions', from_namespace='users.models')
-@inject_provider('subscription_form', from_namespace='users.forms')
 class Landing(View):
 
     TEMPLATE = 'landing/index.html'
@@ -15,18 +17,18 @@ class Landing(View):
     def get(self, request):
         return render(request,
                       self.TEMPLATE,
-                      {'form': self.subscription_form()})
+                      {'form': SubscriptionForm(codecha_client=CodechaClient(**settings.CODECHA_KEYS))})
 
     def post(self, request):
         additional_data = {'client_ip': _get_ip(request),
                            'http_referrer': request.META['HTTP_REFERER']}
-        form = self.subscription_form(dict(request.POST.items() +
-                                           additional_data.items()))
+        form = SubscriptionForm(dict(request.POST.items() +
+                                     additional_data.items()), codecha_client=CodechaClient(**settings.CODECHA_KEYS))
         if not form.is_valid():
             return render(request, self.TEMPLATE, {'form': form})
 
         try:
-            self.subscriptions.subscribe(**form.cleaned_data)
+            Subscriptions().subscribe(**form.cleaned_data)
         except ValidationError as exception:
             if exception.message_dict:
                 for field, errors in exception.message_dict.iteritems():

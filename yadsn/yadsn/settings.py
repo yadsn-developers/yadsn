@@ -36,8 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'djpybinder',
-
     # Backend apps
     'backend.codecha',
     'backend.stackexchange',
@@ -47,10 +45,6 @@ INSTALLED_APPS = (
     'frontend.website',
 )
 
-DJPYBINDER_CATALOGS = (
-    'yadsn.catalogs.codecha',
-    'yadsn.catalogs.users',
-)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
