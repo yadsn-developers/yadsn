@@ -1,0 +1,3 @@
+"""
+YADSN Informational system.
+"""

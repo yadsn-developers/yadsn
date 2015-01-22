@@ -1,0 +1,3 @@
+"""
+YADSN web application.
+"""
