@@ -42,7 +42,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello(subscriptions_manager=YADSNModels.subscriptions_manager):
-    subscriber = subscriptions_manager().subscribe(email='rmogilatov@gmail.com')
+    subscriber = subscriptions_manager().subscribe(email='test+mail@gmail.com')
     print subscriber, subscriber.email, subscriber.id
     return 'Hello, from YADSN Flask Web Application!'
 
