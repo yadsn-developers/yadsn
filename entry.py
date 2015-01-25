@@ -1,9 +1,6 @@
-"""
-YADSN Flask Web Application.
-"""
-
 from flask import Flask, request
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.migrate import Migrate
 
 from objects.providers import Object
 
@@ -15,16 +12,18 @@ from yadsn.error import BaseError
 app = Flask(__name__)
 app.config.from_pyfile('local.cfg')
 
+sqlalchemy = SQLAlchemy()
+sqlalchemy.init_app(app)
 
-sqlalchemy = SQLAlchemy(app)
+migrate = Migrate()
+migrate.init_app(app, sqlalchemy)
 
+with app.app_context():
+    Dependencies.database_session.satisfy(Object(sqlalchemy.session))
+    Dependencies.config.satisfy(Object(app.config))
 
-Dependencies.database_session.satisfy(Object(sqlalchemy.session))
-Dependencies.config.satisfy(Object(app.config))
-
-shared.Base.metadata.bind = sqlalchemy.engine
-sqlalchemy.Model.metadata = shared.Base.metadata
-
+    shared.Base.metadata.bind = sqlalchemy.engine
+    sqlalchemy.Model.metadata = shared.Base.metadata
 
 @app.route('/')
 def hello(subscriptions_manager=Models.subscriptions_manager):
@@ -37,7 +36,3 @@ def hello(subscriptions_manager=Models.subscriptions_manager):
     else:
         print subscriber, subscriber.email, subscriber.id
         return 'Hello, from YADSN Flask Web Application!'
-
-
-if __name__ == '__main__':
-    app.run(port=7000, debug=True)

@@ -3,11 +3,9 @@ Scripts.
 """
 
 from flask.ext.script import Manager
-from flask.ext.migrate import Migrate, MigrateCommand
-from app import app, sqlalchemy
+from flask.ext.migrate import MigrateCommand
+from entry import app
 
-
-migrate = Migrate(app, sqlalchemy)
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
