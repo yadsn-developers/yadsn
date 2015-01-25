@@ -5,7 +5,10 @@ YADSN Flask Web Application.
 from flask import Flask, request
 from flask.ext.sqlalchemy import SQLAlchemy
 
-from yadsn import YADSN, Models, shared
+from objects.providers import Object
+
+from yadsn import Models, Dependencies
+from yadsn import shared
 from yadsn.error import BaseError
 
 
@@ -13,14 +16,15 @@ app = Flask(__name__)
 app.config.from_pyfile('local.cfg')
 
 
-sqlalchemy = SQLAlchemy()
-sqlalchemy.init_app(app)
+sqlalchemy = SQLAlchemy(app)
 
 
-YADSN.start(database_engine=sqlalchemy.engine,
-            database_session=sqlalchemy.session,
-            config=app.config)
-shared.Base.metadata.create_all()
+Dependencies.database_session.satisfy(Object(sqlalchemy.session))
+Dependencies.config.satisfy(Object(app.config))
+
+shared.Base.metadata.bind = sqlalchemy.engine
+sqlalchemy.Model.metadata = shared.Base.metadata
+sqlalchemy.Model.metadata = shared.Base.metadata
 
 
 @app.route('/')
