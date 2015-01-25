@@ -5,6 +5,7 @@ YADSN informational system.
 from objects import AbstractCatalog
 from objects.providers import NewInstance, ExternalDependency
 from objects.injections import InitArg
+
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.scoping import scoped_session
 
@@ -33,6 +34,8 @@ class Services(AbstractCatalog):
 
     stack_exchange = None
 
+    github = None
+
 
 class Models(AbstractCatalog):
     """
@@ -42,3 +45,7 @@ class Models(AbstractCatalog):
     subscriptions_manager = NewInstance(subscriptions.SubscriptionsManager,
                                         InitArg('session', Dependencies.database_session))
     """ :type: (objects.Provider) -> subscriptions.SubscriptionsManager """
+
+    users_manager = None
+
+    auth_manager = None
