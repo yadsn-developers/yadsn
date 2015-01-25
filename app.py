@@ -24,7 +24,6 @@ Dependencies.config.satisfy(Object(app.config))
 
 shared.Base.metadata.bind = sqlalchemy.engine
 sqlalchemy.Model.metadata = shared.Base.metadata
-sqlalchemy.Model.metadata = shared.Base.metadata
 
 
 @app.route('/')
