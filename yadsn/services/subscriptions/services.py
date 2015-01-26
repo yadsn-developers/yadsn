@@ -2,11 +2,12 @@
 Subscriptions services.
 """
 
-from yadsn.error import BaseError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from .models import Subscriber
+
+from yadsn.error import BaseError
 
 
 class SubscriptionsService(object):
