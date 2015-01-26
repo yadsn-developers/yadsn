@@ -6,13 +6,13 @@ from objects import AbstractCatalog
 from objects.providers import NewInstance
 from objects.injections import InitArg
 
-from .resources import Resources
-
 from yadsn.services import (
     subscriptions,
     users,
     auth
 )
+
+from .resources import Resources
 
 
 class Services(AbstractCatalog):

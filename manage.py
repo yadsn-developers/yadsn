@@ -3,11 +3,16 @@ Scripts.
 """
 
 from flask.ext.script import Manager
-from flask.ext.migrate import MigrateCommand
+from flask.ext.migrate import Migrate, MigrateCommand
+
 from yadsn.app import create_app
+from yadsn.catalogs import Resources
 
 
-manager = Manager(create_app)
+app = create_app()
+manager = Manager(app)
+
+migrate = Migrate(app, Resources.db())
 manager.add_command('db', MigrateCommand)
 
 

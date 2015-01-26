@@ -3,21 +3,22 @@ Subscriptions service models.
 """
 
 from datetime import datetime
-from yadsn.extensions import db
+from sqlalchemy import Column, Integer, String, DateTime
+from yadsn.catalogs import Resources
 
 
-class Subscriber(db.Model):
+class Subscriber(Resources.db().Model):
     """
     Subscriber database model.
     """
 
     __tablename__ = 'subscriber'
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True)
-    codecha_language = db.Column(db.String)
-    added_at = db.Column(db.DateTime, default=datetime.utcnow)
-    http_referrer = db.Column(db.String, nullable=True)
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True)
+    codecha_language = Column(String)
+    added_at = Column(DateTime, default=datetime.utcnow)
+    http_referrer = Column(String, nullable=True)
 
     def __init__(self, email, codecha_language, http_referrer=None):
         """

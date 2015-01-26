@@ -5,9 +5,10 @@ YADSN Flask Web Application.
 from flask import Flask, request
 from objects.providers import Object
 
-from yadsn.catalogs.services import Services
-from yadsn.catalogs.resources import Resources
-from yadsn.extensions import db, migrate
+from yadsn.catalogs import (
+    Resources,
+    Services
+)
 from yadsn.error import BaseError
 
 
@@ -15,7 +16,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('../local.cfg')
 
-    init_extensions(app)
     init_resources(app)
 
     @app.route('/')
@@ -33,19 +33,9 @@ def create_app():
     return app
 
 
-def init_extensions(app):
-    """
-    Initializes Flask extensions.
-    """
-    db.init_app(app)
-    migrate.init_app(app, db)
-
-
 def init_resources(app):
     """
-    Initializes YADS dependencies.
+    Initializes dependencies.
     """
-    with app.app_context():
-        # Config binding.
-        Resources.config.satisfy(Object(app.config))
-        Resources.db.satisfy(Object(db))
+    Resources.db().init_app(app)
+    Resources.config.satisfy(Object(app.config))
