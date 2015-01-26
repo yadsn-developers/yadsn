@@ -4,10 +4,10 @@ Scripts.
 
 from flask.ext.script import Manager
 from flask.ext.migrate import MigrateCommand
-from entry import app
+from yadsn.app import create_app
 
 
-manager = Manager(app)
+manager = Manager(create_app)
 manager.add_command('db', MigrateCommand)
 
 

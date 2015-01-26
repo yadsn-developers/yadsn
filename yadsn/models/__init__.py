@@ -1,3 +1,0 @@
-"""
-YADSN models package.
-"""
