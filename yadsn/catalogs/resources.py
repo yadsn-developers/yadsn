@@ -23,6 +23,7 @@ class Resources(AbstractCatalog):
     """ :type: (objects.Provider) -> SQLAlchemy """
 
     codecha = Singleton(codecha.Client,
+                        InitArg('url', config.CODECHA.URL),
                         InitArg('public_key', config.CODECHA.PUBLIC_KEY),
                         InitArg('private_key', config.CODECHA.PRIVATE_KEY))
     """ :type: (objects.Provider) -> codecha.Client """
