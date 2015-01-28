@@ -3,7 +3,7 @@ Services catalog.
 """
 
 from objects import AbstractCatalog
-from objects.providers import NewInstance
+from objects.providers import Scoped
 from objects.injections import InitArg
 
 from yadsn.services import (
@@ -20,14 +20,14 @@ class Services(AbstractCatalog):
     Services catalog.
     """
 
-    subscriptions = NewInstance(subscriptions.SubscriptionsService,
-                                InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> subscriptions.SubscriptionsManager """
+    subscriptions = Scoped(subscriptions.SubscriptionsService,
+                           InitArg('db', Resources.db))
+    """ :type: (objects.Provider) -> subscriptions.SubscriptionsService """
 
-    users = NewInstance(users.UsersService,
-                        InitArg('db', Resources.db))
+    users = Scoped(users.UsersService,
+                   InitArg('db', Resources.db))
     """ :type: (objects.Provider) -> users.UsersService """
 
-    auth = NewInstance(auth.AuthService,
-                       InitArg('db', Resources.db))
+    auth = Scoped(auth.AuthService,
+                  InitArg('db', Resources.db))
     """ :type: (objects.Provider) -> users.UsersService """

@@ -3,7 +3,7 @@ YADSN Flask Web Application.
 """
 
 from flask import Flask, request
-from objects.providers import Object
+from objects.providers import Scoped
 
 from yadsn.catalogs import (
     Resources,
@@ -17,6 +17,7 @@ def create_app():
     app.config.from_pyfile('../local.cfg')
 
     init_resources(app)
+    init_services(app)
 
     @app.route('/')
     def hello(subscriptions=Services.subscriptions):
@@ -35,7 +36,20 @@ def create_app():
 
 def init_resources(app):
     """
-    Initializes dependencies.
+    Initializes resources.
     """
+    Resources.config.update_from(app.config)
     Resources.db().init_app(app)
-    Resources.config.satisfy(Object(app.config))
+
+
+def init_services(app):
+    """
+    Initializes services.
+    """
+    for _, service_provider in Services.__all_providers__(provider_type=Scoped):
+        app.before_request(service_provider.in_scope)
+
+        @app.after_request
+        def after_request(response_cls):
+            service_provider.out_of_scope()
+            return response_cls
