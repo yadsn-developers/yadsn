@@ -1,5 +1,5 @@
 """
-Resources catalog.
+Application resources.
 """
 
 from objects import AbstractCatalog
@@ -7,7 +7,6 @@ from objects.providers import Singleton, Config
 from objects.injections import InitArg
 
 from flask.ext.sqlalchemy import SQLAlchemy
-
 from yadsn.utils import codecha
 
 

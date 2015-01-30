@@ -1,5 +1,5 @@
 """
-Subscriptions service.
+Subscriptions services.
 """
 
 from sqlalchemy.exc import IntegrityError
@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from yadsn.error import BaseError
 
 
-class Service(object):
+class Subscriptions(object):
     """
     Subscriptions service.
     """

@@ -1,10 +1,10 @@
 """
-Subscriptions database models.
+Subscriptions models.
 """
 
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
-from yadsn.catalogs import Resources
+from yadsn.resources import Resources
 
 
 class Subscriber(Resources.db().Model):
