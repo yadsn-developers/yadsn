@@ -1,9 +1,9 @@
 """
-Users services.
+Users service.
 """
 
 
-class UsersService(object):
+class Service(object):
     """
     Users service.
     """

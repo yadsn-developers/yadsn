@@ -1,9 +1,9 @@
 """
-Auth services.
+Auth service.
 """
 
 
-class AuthService(object):
+class Service(object):
     """
     Auth service.
     """

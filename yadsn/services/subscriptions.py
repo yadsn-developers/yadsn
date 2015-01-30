@@ -1,28 +1,27 @@
 """
-Subscriptions services.
+Subscriptions service.
 """
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-
-from .models import Subscriber
-
 from yadsn.error import BaseError
 
 
-class SubscriptionsService(object):
+class Service(object):
     """
     Subscriptions service.
     """
 
-    def __init__(self, db):
+    def __init__(self, db, subscriber_model):
         """
         Initializer.
 
         :param db:
+        :param subscriber_model:
         :return:
         """
         self.db = db
+        self.subscriber_model = subscriber_model
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
@@ -31,9 +30,9 @@ class SubscriptionsService(object):
         :param email:
         :return:
         """
-        subscriber = Subscriber(email=email,
-                                codecha_language=codecha_language,
-                                http_referrer=http_referrer)
+        subscriber = self.subscriber_model(email=email,
+                                           codecha_language=codecha_language,
+                                           http_referrer=http_referrer)
         self.db.session.add(subscriber)
         try:
             self.db.session.commit()
@@ -50,7 +49,7 @@ class SubscriptionsService(object):
         :return:
         """
         try:
-            subscriber = self.db.session.query(Subscriber.email == email).one()
+            subscriber = self.db.session.query(self.subscriber_model.email == email).one()
         except NoResultFound:
             pass
         else:

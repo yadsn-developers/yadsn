@@ -1,5 +1,5 @@
 """
-Subscriptions service models.
+Subscriptions database models.
 """
 
 from datetime import datetime
@@ -8,10 +8,6 @@ from yadsn.catalogs import Resources
 
 
 class Subscriber(Resources.db().Model):
-    """
-    Subscriber database model.
-    """
-
     __tablename__ = 'subscriber'
 
     id = Column(Integer, primary_key=True)
@@ -21,14 +17,6 @@ class Subscriber(Resources.db().Model):
     http_referrer = Column(String, nullable=True)
 
     def __init__(self, email, codecha_language, http_referrer=None):
-        """
-        Initializer.
-
-        :param email:
-        :param codecha_language:
-        :param http_referrer:
-        :return:
-        """
         self.email = email
         self.codecha_language = codecha_language
         self.http_referrer = http_referrer

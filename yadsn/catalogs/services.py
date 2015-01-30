@@ -12,6 +12,7 @@ from yadsn.services import (
     auth
 )
 
+from .models import Models
 from .resources import Resources
 
 
@@ -20,14 +21,15 @@ class Services(AbstractCatalog):
     Services catalog.
     """
 
-    subscriptions = Scoped(subscriptions.SubscriptionsService,
-                           InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> subscriptions.SubscriptionsService """
+    subscriptions = Scoped(subscriptions.Service,
+                           InitArg('db', Resources.db),
+                           InitArg('subscriber_model', Models.subscriber))
+    """ :type: (objects.Provider) -> subscriptions.Service """
 
-    users = Scoped(users.UsersService,
+    users = Scoped(users.Service,
                    InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> users.UsersService """
+    """ :type: (objects.Provider) -> users.Service """
 
-    auth = Scoped(auth.AuthService,
+    auth = Scoped(auth.Service,
                   InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> users.UsersService """
+    """ :type: (objects.Provider) -> users.Service """
