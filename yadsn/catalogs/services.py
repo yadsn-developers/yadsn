@@ -6,14 +6,14 @@ from objects import AbstractCatalog
 from objects.providers import Scoped
 from objects.injections import InitArg
 
-from yadsn.services import (
+from .models import Models
+from .resources import Resources
+
+from yadsn.backend.services import (
     subscriptions,
     users,
     auth
 )
-
-from .models import Models
-from .resources import Resources
 
 
 class Services(AbstractCatalog):

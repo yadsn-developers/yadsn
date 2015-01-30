@@ -5,7 +5,7 @@ Database models catalog.
 from objects import AbstractCatalog
 from objects.providers import Class
 
-from yadsn.models import (
+from yadsn.backend.models import (
     subscriptions,
 )
 
