@@ -6,13 +6,15 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from yadsn.error import BaseError
 
+from .models import Subscriber
+
 
 class Subscriptions(object):
     """
     Subscriptions service.
     """
 
-    def __init__(self, db, subscriber_model):
+    def __init__(self, db, subscriber_model=Subscriber):
         """
         Initializer.
 

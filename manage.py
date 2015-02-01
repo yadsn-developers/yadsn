@@ -6,7 +6,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from yadsn.app import create_app
-from yadsn.resources import Resources
+from yadsn.catalogs import Resources
 
 
 app = create_app()
