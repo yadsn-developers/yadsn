@@ -1,5 +1,5 @@
 """
-Application resources.
+Resources catalog.
 """
 
 from objects import AbstractCatalog

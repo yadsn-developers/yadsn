@@ -1,5 +1,5 @@
 """
-Subscriptions module.
+Subscriptions package.
 """
 
 from . import services

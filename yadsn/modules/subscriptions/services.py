@@ -6,35 +6,33 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from yadsn.error import BaseError
 
-from .models import Subscriber
-
 
 class Subscriptions(object):
     """
     Subscriptions service.
     """
 
-    def __init__(self, db, subscriber_model=Subscriber):
+    def __init__(self, db, models):
         """
         Initializer.
 
-        :param db:
-        :param subscriber_model:
+        :type db: flask.ext.sqlalchemy.SQLAlchemy
+        :type models: Catalog
         :return:
         """
         self.db = db
-        self.subscriber_model = subscriber_model
+        self.models = models
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
         Subscribes someone.
 
-        :param email:
+        :type email: str
         :return:
         """
-        subscriber = self.subscriber_model(email=email,
-                                           codecha_language=codecha_language,
-                                           http_referrer=http_referrer)
+        subscriber = self.models.Subscriber(email=email,
+                                            codecha_language=codecha_language,
+                                            http_referrer=http_referrer)
         self.db.session.add(subscriber)
         try:
             self.db.session.commit()
@@ -51,7 +49,7 @@ class Subscriptions(object):
         :return:
         """
         try:
-            subscriber = self.db.session.query(self.subscriber_model.email == email).one()
+            subscriber = self.db.session.query(self.models.Subscriber.email == email).one()
         except NoResultFound:
             pass
         else:
