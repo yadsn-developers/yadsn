@@ -3,8 +3,13 @@ Subscriptions services.
 """
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import mapper
 from sqlalchemy.orm.exc import NoResultFound
+
 from yadsn.error import BaseError
+
+from .domains import Subscriber
+from .tables import subscriptions
 
 
 class Subscriptions(object):
@@ -12,16 +17,15 @@ class Subscriptions(object):
     Subscriptions service.
     """
 
-    def __init__(self, db, models):
+    def __init__(self, db):
         """
         Initializer.
 
         :type db: flask.ext.sqlalchemy.SQLAlchemy
-        :type models: Catalog
         :return:
         """
         self.db = db
-        self.models = models
+        mapper(Subscriber, subscriptions(db.metadata))
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
@@ -30,9 +34,9 @@ class Subscriptions(object):
         :type email: str
         :return:
         """
-        subscriber = self.models.Subscriber(email=email,
-                                            codecha_language=codecha_language,
-                                            http_referrer=http_referrer)
+        subscriber = Subscriber(email=email,
+                                codecha_language=codecha_language,
+                                http_referrer=http_referrer)
         self.db.session.add(subscriber)
         try:
             self.db.session.commit()
@@ -49,7 +53,7 @@ class Subscriptions(object):
         :return:
         """
         try:
-            subscriber = self.db.session.query(self.models.Subscriber.email == email).one()
+            subscriber = self.db.session.query(Subscriber.email == email).one()
         except NoResultFound:
             pass
         else:

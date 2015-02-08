@@ -15,7 +15,8 @@ def create_app():
     app.config.from_pyfile('../local.cfg')
 
     init_resources(app)
-    init_models()
+    catalogs.Subscriptions.service()
+    catalogs.Users.service()
 
     @app.route('/')
     def hello(subscriptions_service=catalogs.Subscriptions.service):
@@ -39,11 +40,3 @@ def init_resources(app):
     """
     catalogs.Resources.config.update_from(app.config)
     catalogs.Resources.db().init_app(app)
-
-
-def init_models():
-    """
-    Initializes models.
-    """
-    catalogs.Subscriptions.models()
-    catalogs.Users.models()

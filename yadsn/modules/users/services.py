@@ -2,8 +2,14 @@
 Users services.
 """
 
+from sqlalchemy.orm import mapper
 from sqlalchemy.exc import IntegrityError
+
 from yadsn.error import BaseError
+
+
+from .domains import User
+from .tables import users
 
 
 class Users(object):
@@ -11,16 +17,15 @@ class Users(object):
     Users service.
     """
 
-    def __init__(self, db, models):
+    def __init__(self, db):
         """
         Initializer.
 
         :type db: flask.ext.sqlalchemy.SQLAlchemy
-        :type models: Catalog
         :return:
         """
         self.db = db
-        self.models = models
+        mapper(User, users(db.metadata))
 
     def create(self, email):
         """
@@ -29,7 +34,7 @@ class Users(object):
         :type email: str
         :return:
         """
-        user = self.models.User(email=email)
+        user = User(email=email)
         self.db.session.add(user)
         try:
             self.db.session.commit()

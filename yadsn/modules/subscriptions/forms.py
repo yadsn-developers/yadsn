@@ -8,9 +8,8 @@ class SubscriptionForm(object):
 
     """
 
-    def __init__(self, models):
+    def __init__(self):
         """
         Initializer.
-        :type models: Catalog
         :return:
         """

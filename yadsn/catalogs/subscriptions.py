@@ -16,15 +16,9 @@ class Subscriptions(AbstractCatalog):
     Subscriptions catalog.
     """
 
-    models = Singleton(subscriptions.models.Catalog,
-                       InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> subscriptions.models.Catalog """
-
     service = Singleton(subscriptions.services.Subscriptions,
-                        InitArg('db', Resources.db),
-                        InitArg('models', models))
+                        InitArg('db', Resources.db))
     """ :type: (objects.Provider) -> subscriptions.services.Subscriptions """
 
-    form = NewInstance(subscriptions.forms.SubscriptionForm,
-                       InitArg('models', models))
+    form = NewInstance(subscriptions.forms.SubscriptionForm)
     """ :type: (objects.Provider) -> subscriptions.forms.SubscriptionForm """

@@ -16,13 +16,8 @@ class Users(AbstractCatalog):
     Users catalog.
     """
 
-    models = Singleton(users.models.Catalog,
-                       InitArg('db', Resources.db))
-    """ :type: (objects.Provider) -> users.models.Catalog """
-
     service = Singleton(users.services.Users,
-                        InitArg('db', Resources.db),
-                        InitArg('models', models))
+                        InitArg('db', Resources.db))
     """ :type: (objects.Provider) -> users.services.Users """
 
     login_form = NewInstance(users.forms.LoginForm,
