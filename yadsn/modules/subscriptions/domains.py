@@ -1,5 +1,5 @@
 """
-Domain models.
+Subscriptions domain models.
 """
 
 

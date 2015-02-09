@@ -1,5 +1,5 @@
 """
-
+Subscriptions database tables.
 """
 
 from datetime import datetime

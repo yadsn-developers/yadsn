@@ -15,11 +15,11 @@ def create_app():
     app.config.from_pyfile('../local.cfg')
 
     init_resources(app)
-    catalogs.Subscriptions.service()
-    catalogs.Users.service()
+    catalogs.Services.users()
+    catalogs.Services.subscriptions()
 
     @app.route('/')
-    def hello(subscriptions_service=catalogs.Subscriptions.service):
+    def hello(subscriptions_service=catalogs.Services.subscriptions):
         try:
             subscriber = subscriptions_service().subscribe(email='test+mail@gmail.com',
                                                            codecha_language='Python',

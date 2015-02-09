@@ -1,5 +1,5 @@
 """
-
+Users database tables.
 """
 
 from datetime import datetime

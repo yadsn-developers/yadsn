@@ -1,5 +1,5 @@
 """
-Domain models.
+Users domain models.
 """
 
 

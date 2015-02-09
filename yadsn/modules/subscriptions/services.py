@@ -21,8 +21,7 @@ class Subscriptions(object):
         """
         Initializer.
 
-        :type db: flask.ext.sqlalchemy.SQLAlchemy
-        :return:
+        :type db: yadsn.utils.interfaces.DbInterface
         """
         self.db = db
         mapper(Subscriber, subscriptions(db.metadata))

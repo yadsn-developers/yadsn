@@ -3,6 +3,5 @@ Application objects catalogs.
 """
 
 from .resources import Resources
-
-from .subscriptions import Subscriptions
-from .users import Users
+from .services import Services
+from .forms import Forms

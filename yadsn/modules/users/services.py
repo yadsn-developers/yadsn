@@ -21,8 +21,7 @@ class Users(object):
         """
         Initializer.
 
-        :type db: flask.ext.sqlalchemy.SQLAlchemy
-        :return:
+        :type db: yadsn.utils.interfaces.DbInterface
         """
         self.db = db
         mapper(User, users(db.metadata))
