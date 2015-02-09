@@ -3,8 +3,6 @@ Subscriptions services.
 """
 
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import mapper
-from sqlalchemy.orm.exc import NoResultFound
 
 from yadsn.error import BaseError
 
@@ -24,7 +22,7 @@ class Subscriptions(object):
         :type db: yadsn.utils.interfaces.DbInterface
         """
         self.db = db
-        mapper(Subscriber, subscriptions(db.metadata))
+        self.subscribtion_table = subscriptions(db.metadata)
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
@@ -33,16 +31,18 @@ class Subscriptions(object):
         :type email: str
         :return:
         """
-        subscriber = Subscriber(email=email,
-                                codecha_language=codecha_language,
-                                http_referrer=http_referrer)
-        self.db.session.add(subscriber)
-        try:
-            self.db.session.commit()
-        except IntegrityError:
-            self.db.session.rollback()
-            raise BaseError('Email {} has been already subscribed'.format(email))
-        return subscriber
+        with self.db.engine.connect() as connection:
+            transaction = connection.begin()
+            insert = self.subscribtion_table.insert()
+            try:
+                result = connection.execute(insert.values(email=email,
+                                                          codecha_language=codecha_language,
+                                                          http_referrer=http_referrer))
+                transaction.commit()
+            except IntegrityError:
+                transaction.rollback()
+                raise BaseError('Email {} has been already subscribed'.format(email))
+            return self._get_by_id(*result.inserted_primary_key)
 
     def unsubscribe(self, email):
         """
@@ -51,10 +51,23 @@ class Subscriptions(object):
         :param email:
         :return:
         """
-        try:
-            subscriber = self.db.session.query(Subscriber.email == email).one()
-        except NoResultFound:
-            pass
-        else:
-            self.db.session.delete(subscriber)
-            self.db.session.commit()
+        with self.db.engine.connect() as connection:
+            transaction = connection.begin()
+            delete = self.subscribtion_table.delete()
+            connection.execute(delete.where(self.subscribtion_table.c.email == email))
+            transaction.commit()
+
+    def _get_by_id(self, id):
+        """
+        Returns subscriber object by id.
+
+        :param id:
+        :return:
+        """
+        with self.db.engine.connect() as connection:
+            select = self.subscribtion_table.select()
+            result = connection.execute(select.where(self.subscribtion_table.c.id == id))
+            subscriber = Subscriber()
+            for name, value in dict(result.fetchone()).iteritems():
+                setattr(subscriber, name, value)
+            return subscriber

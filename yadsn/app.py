@@ -26,9 +26,10 @@ def create_app():
                                                            http_referrer=request.referrer)
         except BaseError as exception:
             print(exception)
+            subscriptions_service().unsubscribe(email='test+mail@gmail.com')
             return str(exception)
         else:
-            print subscriber, subscriber.email, subscriber.id
+            print subscriber, subscriber.email, subscriber.id, subscriber.added_at
             return 'Hello, from YADSN Flask Web Application!'
 
     return app

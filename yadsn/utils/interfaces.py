@@ -13,3 +13,8 @@ class DbInterface(object):
     """
     :type session: sqlalchemy.MetaData
     """
+
+    engine = None
+    """
+    :type engine: sqlalchemy.engine.Engine
+    """
