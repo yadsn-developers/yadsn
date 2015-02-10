@@ -12,7 +12,7 @@ from yadsn.catalogs import Resources
 app = create_app()
 manager = Manager(app)
 
-migrate = Migrate(app, Resources.db())
+migrate = Migrate(app, Resources.database())
 manager.add_command('db', MigrateCommand)
 
 

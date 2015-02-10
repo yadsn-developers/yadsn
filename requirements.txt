@@ -4,3 +4,4 @@ Flask-Script
 Flask-Migrate
 Objects
 requests
+WTForms

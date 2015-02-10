@@ -14,7 +14,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('../local.cfg')
 
-    init_resources(app)
+    catalogs.Resources.config.update_from(app.config)
     catalogs.Services.users()
     catalogs.Services.subscriptions()
 
@@ -33,11 +33,3 @@ def create_app():
             return 'Hello, from YADSN Flask Web Application!'
 
     return app
-
-
-def init_resources(app):
-    """
-    Initializes resources.
-    """
-    catalogs.Resources.config.update_from(app.config)
-    catalogs.Resources.db().init_app(app)

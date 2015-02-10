@@ -15,14 +15,14 @@ class Subscriptions(object):
     Subscriptions service.
     """
 
-    def __init__(self, db):
+    def __init__(self, database):
         """
         Initializer.
 
-        :type db: yadsn.utils.interfaces.DbInterface
+        :type database: yadsn.utils.interfaces.DbInterface
         """
-        self.db = db
-        self.subscribtion_table = subscriptions(db.metadata)
+        self.database = database
+        self.subscribtion_table = subscriptions(database.metadata)
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
@@ -31,7 +31,7 @@ class Subscriptions(object):
         :type email: str
         :return:
         """
-        with self.db.engine.connect() as connection:
+        with self.database.engine.connect() as connection:
             transaction = connection.begin()
             insert = self.subscribtion_table.insert()
             try:
@@ -51,7 +51,7 @@ class Subscriptions(object):
         :param email:
         :return:
         """
-        with self.db.engine.connect() as connection:
+        with self.database.engine.connect() as connection:
             transaction = connection.begin()
             delete = self.subscribtion_table.delete()
             connection.execute(delete.where(self.subscribtion_table.c.email == email))
@@ -64,7 +64,7 @@ class Subscriptions(object):
         :param id:
         :return:
         """
-        with self.db.engine.connect() as connection:
+        with self.database.engine.connect() as connection:
             select = self.subscribtion_table.select()
             result = connection.execute(select.where(self.subscribtion_table.c.id == id))
             subscriber = Subscriber()

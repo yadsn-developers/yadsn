@@ -17,9 +17,9 @@ class Services(AbstractCatalog):
     """
 
     subscriptions = Singleton(subscriptions.services.Subscriptions,
-                              InitArg('db', Resources.db))
+                              InitArg('database', Resources.database))
     """ :type: (objects.Provider) -> subscriptions.services.Subscriptions """
 
     users = Singleton(users.services.Users,
-                      InitArg('db', Resources.db))
+                      InitArg('database', Resources.database))
     """ :type: (objects.Provider) -> users.services.Users """

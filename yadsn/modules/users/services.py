@@ -17,14 +17,14 @@ class Users(object):
     Users service.
     """
 
-    def __init__(self, db):
+    def __init__(self, database):
         """
         Initializer.
 
-        :type db: yadsn.utils.interfaces.DbInterface
+        :type database: yadsn.utils.interfaces.DbInterface
         """
-        self.db = db
-        mapper(User, users(db.metadata))
+        self.database = database
+        mapper(User, users(database.metadata))
 
     def create(self, email):
         """
@@ -34,10 +34,10 @@ class Users(object):
         :return:
         """
         user = User(email=email)
-        self.db.session.add(user)
+        self.database.session.add(user)
         try:
-            self.db.session.commit()
+            self.database.session.commit()
         except IntegrityError:
-            self.db.session.rollback()
+            self.database.session.rollback()
             raise BaseError('User {} has been already created'.format(email))
         return user

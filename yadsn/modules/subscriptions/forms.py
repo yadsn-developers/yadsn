@@ -2,14 +2,12 @@
 Subscriptions forms.
 """
 
+from wtforms import Form, StringField, validators
 
-class SubscriptionForm(object):
+
+class SubscriptionForm(Form):
+    """
+    Subscription form.
     """
 
-    """
-
-    def __init__(self):
-        """
-        Initializer.
-        :return:
-        """
+    email = StringField('Email Address', [validators.Length(min=6, max=35)])
