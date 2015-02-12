@@ -2,7 +2,9 @@
 Subscriptions forms.
 """
 
-from wtforms import Form, StringField, validators
+from wtforms import Form
+from wtforms import StringField
+from wtforms import validators
 
 
 class SubscriptionForm(Form):
