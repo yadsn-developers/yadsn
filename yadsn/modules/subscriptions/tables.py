@@ -3,7 +3,11 @@ Subscriptions database tables.
 """
 
 from datetime import datetime
-from sqlalchemy import Table, Column, Integer, String, DateTime
+from sqlalchemy import Table
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import DateTime
 
 
 def subscriptions(metadata):

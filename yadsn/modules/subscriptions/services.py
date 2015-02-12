@@ -22,7 +22,7 @@ class Subscriptions(object):
         :type database: yadsn.utils.interfaces.DbInterface
         """
         self.database = database
-        self.subscribtion_table = subscriptions(database.metadata)
+        self.table = subscriptions(database.metadata)
 
     def subscribe(self, email, codecha_language, http_referrer=None):
         """
@@ -33,11 +33,10 @@ class Subscriptions(object):
         """
         with self.database.engine.connect() as connection:
             transaction = connection.begin()
-            insert = self.subscribtion_table.insert()
             try:
-                result = connection.execute(insert.values(email=email,
-                                                          codecha_language=codecha_language,
-                                                          http_referrer=http_referrer))
+                result = connection.execute(self.table.insert().values(email=email,
+                                                                       codecha_language=codecha_language,
+                                                                       http_referrer=http_referrer))
                 transaction.commit()
             except IntegrityError:
                 transaction.rollback()
@@ -53,8 +52,7 @@ class Subscriptions(object):
         """
         with self.database.engine.connect() as connection:
             transaction = connection.begin()
-            delete = self.subscribtion_table.delete()
-            connection.execute(delete.where(self.subscribtion_table.c.email == email))
+            connection.execute(self.table.delete().where(self.table.columns.email == email))
             transaction.commit()
 
     def _get_by_id(self, id):
@@ -65,8 +63,7 @@ class Subscriptions(object):
         :return:
         """
         with self.database.engine.connect() as connection:
-            select = self.subscribtion_table.select()
-            result = connection.execute(select.where(self.subscribtion_table.c.id == id))
+            result = connection.execute(self.table.select().where(self.table.columns.id == id))
             subscriber = Subscriber()
             for name, value in dict(result.fetchone()).iteritems():
                 setattr(subscriber, name, value)
