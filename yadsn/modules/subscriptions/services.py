@@ -13,9 +13,9 @@ from .domains import Subscriber
 from .tables import subscriptions
 
 
-class Subscribers(object):
+class Subscriptions(object):
     """
-    Subscribers service.
+    Subscriptions service.
     """
 
     def __init__(self, database):
