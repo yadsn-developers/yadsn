@@ -16,17 +16,18 @@ def create_app():
 
     catalogs.Resources.config.update_from(app.config)
     catalogs.Services.users()
-    catalogs.Services.subscriptions()
+    catalogs.Services.subscribers()
 
     @app.route('/')
-    def hello(subscriptions_service=catalogs.Services.subscriptions):
+    def hello(subscribers=catalogs.Services.subscribers):
         try:
-            subscriber = subscriptions_service().subscribe(email='test+mail@gmail.com',
-                                                           codecha_language='Python',
-                                                           http_referrer=request.referrer)
+            subscriber = subscribers().subscribe(email='test+mail@gmail.com',
+                                                 codecha_language='Python',
+                                                 http_referrer=request.referrer)
         except BaseError as exception:
             print(exception)
-            subscriptions_service().unsubscribe(email='test+mail@gmail.com')
+            subscriber = subscribers().get_by_email(email='test+mail@gmail.com')
+            subscribers().unsubscribe(subscriber)
             return str(exception)
         else:
             print subscriber, subscriber.email, subscriber.id, subscriber.added_at
