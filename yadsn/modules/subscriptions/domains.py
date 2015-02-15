@@ -2,8 +2,13 @@
 Subscriptions domain models.
 """
 
+from yadsn.utils import domain
 
-class Subscriber(object):
+
+class Subscriber(domain.Model):
+    """
+    Subscriber domain model.
+    """
 
     id = None
     email = None

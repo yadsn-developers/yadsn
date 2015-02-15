@@ -5,7 +5,6 @@ Subscriptions services.
 from sqlalchemy.sql.expression import select
 from sqlalchemy.sql.expression import insert
 from sqlalchemy.sql.expression import update
-from sqlalchemy.exc import IntegrityError
 
 from yadsn.error import BaseError
 
@@ -27,23 +26,6 @@ class Subscriptions(object):
         self.database = database
         self.table = subscriptions(database.metadata)
 
-    def get_by_id(self, id):
-        """
-        Returns subscriber by id.
-
-        :type id: int
-        :rtype: Subscriber
-        """
-        with self.database.engine.connect() as connection:
-            result = connection.execute(select([self.table])
-                                        .where(self.table.columns.id == id)).fetchone()
-        if not result:
-            raise BaseError('Subscriber could not be found by id "{}"'.format(id))
-        subscriber = Subscriber()
-        for name, value in dict(result).iteritems():
-            setattr(subscriber, name, value)
-        return subscriber
-
     def get_by_email(self, email):
         """
         Returns subscriber by email.
@@ -52,11 +34,11 @@ class Subscriptions(object):
         :rtype: Subscriber
         """
         with self.database.engine.connect() as connection:
-            id = connection.execute(select([self.table.columns.id])
-                                    .where(self.table.columns.email == email)).scalar()
-        if not id:
+            result = connection.execute(select([self.table])
+                                        .where(self.table.columns.email == email)).fetchone()
+        if not result:
             raise BaseError('Subscriber could not be found by email "{}"'.format(email))
-        return self.get_by_id(id)
+        return Subscriber(**dict(result))
 
     def get_by_key(self, key):
         """
@@ -66,31 +48,40 @@ class Subscriptions(object):
         :rtype: Subscriber
         """
         with self.database.engine.connect() as connection:
-            id = connection.execute(select([self.table.columns.id])
-                                    .where(self.table.columns.key == key)).scalar()
-        if not id:
+            result = connection.execute(select([self.table])
+                                        .where(self.table.columns.key == key)).fetchone()
+        if not result:
             raise BaseError('Subscriber could not be found by key "{}"'.format(key))
-        return self.get_by_id(id)
+        return Subscriber(**dict(result))
 
-    def subscribe(self, email, codecha_language, http_referrer=None):
+    def subscribe(self, email, **kwargs):
         """
         Subscribes someone.
 
         :type email: str
+        :type codecha_language: str
+        :type http_referrer: str
         :rtype: Subscriber
         """
-        with self.database.engine.connect() as connection:
-            transaction = connection.begin()
-            try:
-                result = connection.execute(insert(self.table)
-                                            .values(email=email,
-                                                    codecha_language=codecha_language,
-                                                    http_referrer=http_referrer))
+        try:
+            subscriber = self.get_by_email(email)
+        except BaseError:
+            with self.database.engine.connect() as connection:
+                transaction = connection.begin()
+                connection.execute(insert(self.table)
+                                   .values(email=email, **kwargs))
                 transaction.commit()
-            except IntegrityError:
-                transaction.rollback()
-                raise BaseError('Email {} has been already subscribed'.format(email))
-        return self.get_by_id(*result.inserted_primary_key)
+            subscriber = self.get_by_email(email)
+        else:
+            if not subscriber.is_active:
+                with self.database.engine.connect() as connection:
+                    transaction = connection.begin()
+                    connection.execute(update(self.table)
+                                       .values(is_active=True)
+                                       .where(self.table.columns.id == subscriber.id))
+                    transaction.commit()
+                subscriber.is_active = True
+        return subscriber
 
     def unsubscribe(self, subscriber):
         """
@@ -102,6 +93,7 @@ class Subscriptions(object):
         with self.database.engine.connect() as connection:
             transaction = connection.begin()
             connection.execute(update(self.table)
-                               .values(is_active=True)
+                               .values(is_active=False)
                                .where(self.table.columns.id == subscriber.id))
             transaction.commit()
+        subscriber.is_active = False

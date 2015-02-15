@@ -20,17 +20,10 @@ def create_app():
 
     @app.route('/')
     def hello(subscriptions=catalogs.Services.subscriptions):
-        try:
-            subscriber = subscriptions().subscribe(email='test+mail@gmail.com',
-                                                   codecha_language='Python',
-                                                   http_referrer=request.referrer)
-        except BaseError as exception:
-            print(exception)
-            subscriber = subscriptions().get_by_email(email='test+mail@gmail.com')
-            subscriptions().unsubscribe(subscriber)
-            return str(exception)
-        else:
-            print subscriber, subscriber.email, subscriber.id, subscriber.added_at
-            return 'Hello, from YADSN Flask Web Application!'
+        subscriber = subscriptions().subscribe(email='test+mail@gmail.com',
+                                               codecha_language='Python',
+                                               http_referrer=request.referrer)
+        print subscriber, subscriber.email, subscriber.id, subscriber.added_at
+        return 'Hello, from YADSN Flask Web Application!'
 
     return app
